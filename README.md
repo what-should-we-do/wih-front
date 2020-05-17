@@ -2,39 +2,44 @@
 
 React Native App for What's in Here.
 
-## development environment
+## Getting Started
 
-- React Native + expo
-- Visual Studio Code / macOS 10.15
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Plan
+### Prerequisites
 
-- [ ] 로그인, 회원가입, 계정찾기
-- [ ] 메인 화면
-- [ ] 지역 선택
-- [ ] 업종 선택
-- [ ] 업소 선택
-- [ ] 최종 경로
+You need to install following softwares on your development environment.
 
-## Installation
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/)
+- [Expo](https://expo.io/)
 
-Use the package manager [yarn](https://yarnpkg.com/) to install dependency packages.
+### Installation
+
+Use the package manager [Yarn](https://yarnpkg.com/) to install dependency packages.
 
 ```shell
 yarn install
 ```
 
-## Usage
+### Start development
 
 ```shell
 yarn start
 ```
 
-## Contributing
+## Development environment
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+- React Native + Expo
 
-Please make sure to update tests as appropriate.
+## Plan
+
+- [ ] Log in, Sign up, Find my account
+- [ ] Main screen
+- [ ] Select district
+- [ ] Select business category
+- [ ] Select business
+- [ ] Final routes
 
 ## License
 
