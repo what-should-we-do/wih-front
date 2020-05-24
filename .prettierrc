@@ -4,5 +4,7 @@
   "endOfLine": "lf",
   "jsxSingleQuote": false,
   "packageManager": "yarn",
-  "singleQuote": false
+  "singleQuote": false,
+  "printWidth": 100,
+  "trailingComma": "es5"
 }
