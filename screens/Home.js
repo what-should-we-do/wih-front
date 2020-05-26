@@ -49,14 +49,14 @@ const Desc = styled.View`
   border-radius: 8px;
 `;
 
-export default function ({ navigation }) {
+export default function({ navigation }) {
   return (
     <Container>
       <View style={{ flex: 2, backgroundColor: "gray" }}>
         <Text style={{ fontSize: 24 }}>지도 API holder</Text>
       </View>
       <DataContainer>
-        <Button>
+        <Button onPress={() => navigation.navigate("Category")}>
           <ButtonText>여기 뭐 있지?</ButtonText>
         </Button>
         <RecommendList>
