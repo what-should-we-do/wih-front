@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions, Text } from "react-native";
+import { View, Dimensions, Text, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -17,18 +17,19 @@ const CategoryContainer = styled.View`
   margin-top: 30px;
   border: solid grey;
   border-radius: 8px;
+  flex-direction: column;
 `;
 
 const Major = styled.View`
-  background-color: red;
+  flex: 0.5;
 `;
 
 const Mid = styled.View`
-  background-color: blue;
+  flex: 0.5;
 `;
 
 const Sub = styled.View`
-  background-color: green;
+  flex: 0.5;
 `;
 
 const SelectedContainer = styled.View`
@@ -37,11 +38,16 @@ const SelectedContainer = styled.View`
   background-color: #f0f0f0;
   margin-top: 20px;
   border-radius: 8px;
+  flex-direction: column;
 `;
 
-const SelectedHeaderText = styled.Text`
-  margin: 10px 15px;
-  font-size: 14px;
+const Selected = styled.View`
+  width: ${WIDTH / 4}px;
+  height: 32px;
+  margin: 0px 5px;
+  border-radius: 8px;
+  background-color: #ffa726;
+  opacity: 0.5;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -62,9 +68,76 @@ const ButtonText = styled.Text`
 
 export default () => (
   <Container>
-    <CategoryContainer></CategoryContainer>
+    <CategoryContainer>
+      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+        <Text
+          style={{
+            textAlign: "center",
+            margin: 15,
+          }}
+        >
+          대분류
+        </Text>
+        <Text style={{ textAlign: "center", margin: 15 }}>중분류</Text>
+        <Text style={{ textAlign: "center", margin: 15 }}>소분류</Text>
+      </View>
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <Major>
+          <ScrollView>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>1</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>2</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>3</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>4</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>5</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>6</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
+          </ScrollView>
+        </Major>
+        <Mid>
+          <ScrollView>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+          </ScrollView>
+        </Mid>
+        <Sub>
+          <ScrollView>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
+          </ScrollView>
+        </Sub>
+      </View>
+    </CategoryContainer>
     <SelectedContainer>
-      <SelectedHeaderText>선택한 업종</SelectedHeaderText>
+      <View>
+        <Text style={{ margin: 15, fontSize: 14 }}>선택한 업종</Text>
+      </View>
+      <View style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+        <Selected></Selected>
+        <Selected></Selected>
+        <Selected></Selected>
+      </View>
     </SelectedContainer>
     <Button>
       <ButtonText>다음</ButtonText>

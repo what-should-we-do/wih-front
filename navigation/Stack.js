@@ -8,6 +8,6 @@ const Stack = createStackNavigator();
 export default () => (
   <Stack.Navigator>
     <Stack.Screen name="Home" component={Home} />
-    <Stack.Screen name="Category" component={Category} />
+    <Stack.Screen options={{ headerTitle: "업종 선택" }} name="Category" component={Category} />
   </Stack.Navigator>
 );
