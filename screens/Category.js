@@ -1,6 +1,9 @@
-import React from "react";
-import { View, Dimensions, Text, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Dimensions, Text, TouchableOpacity, ScrollView } from "react-native";
 import styled from "styled-components/native";
+
+import Selected from "../screens/Selected";
+import { withTheme } from "react-native-elements";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -20,16 +23,21 @@ const CategoryContainer = styled.View`
   flex-direction: column;
 `;
 
-const Major = styled.View`
-  flex: 0.5;
+const Header = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  border-bottom-width: 1px;
+  border-bottom-color: lightgrey;
 `;
 
-const Mid = styled.View`
-  flex: 0.5;
+const Options = styled.View`
+  flex: 1;
+  flex-direction: row;
 `;
 
-const Sub = styled.View`
-  flex: 0.5;
+const Option = styled.Text`
+  text-align: center;
+  margin: 10px 0;
 `;
 
 const SelectedContainer = styled.View`
@@ -41,13 +49,14 @@ const SelectedContainer = styled.View`
   flex-direction: column;
 `;
 
-const Selected = styled.View`
-  width: ${WIDTH / 4}px;
-  height: 32px;
-  margin: 0px 5px;
-  border-radius: 8px;
-  background-color: #ffa726;
-  opacity: 0.5;
+const SelectedContainerHeader = styled.View`
+  font-size: 14px;
+`;
+
+const SelectedContainerBody = styled.View`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -65,82 +74,110 @@ const ButtonText = styled.Text`
   font-size: 16px;
   text-align: center;
 `;
-
-export default () => (
-  <Container>
-    <CategoryContainer>
-      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-        <Text
-          style={{
-            textAlign: "center",
-            margin: 15,
-          }}
-        >
-          대분류
-        </Text>
-        <Text style={{ textAlign: "center", margin: 15 }}>중분류</Text>
-        <Text style={{ textAlign: "center", margin: 15 }}>소분류</Text>
-      </View>
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <Major>
-          <ScrollView>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>1</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>2</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>3</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>4</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>5</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>6</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>7</Text>
-          </ScrollView>
-        </Major>
-        <Mid>
-          <ScrollView>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-          </ScrollView>
-        </Mid>
-        <Sub>
-          <ScrollView>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-            <Text style={{ textAlign: "center", marginBottom: 10 }}>sfasafas</Text>
-          </ScrollView>
-        </Sub>
-      </View>
-    </CategoryContainer>
-    <SelectedContainer>
-      <View>
-        <Text style={{ margin: 15, fontSize: 14 }}>선택한 업종</Text>
-      </View>
-      <View style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-        <Selected></Selected>
-        <Selected></Selected>
-        <Selected></Selected>
-      </View>
-    </SelectedContainer>
-    <Button>
-      <ButtonText>다음</ButtonText>
-    </Button>
-  </Container>
-);
+export default () => {
+  const [category, setCategory] = useState({
+    major: "",
+    mid: "",
+    sub: "",
+  });
+  const [majorPressed, setMajorPressed] = useState(false);
+  const [midPressed, setMidPressed] = useState(false);
+  const [minorPressed, setMinorPressed] = useState(false);
+  return (
+    <Container>
+      <CategoryContainer>
+        <Header>
+          <Text style={{ textAlign: "center", fontSize: 16, margin: 15 }}>대분류</Text>
+          <Text style={{ textAlign: "center", fontSize: 16, margin: 15 }}>중분류</Text>
+          <Text style={{ textAlign: "center", fontSize: 16, margin: 15 }}>소분류</Text>
+        </Header>
+        <Options>
+          <View style={{ flex: 0.5 }}>
+            <ScrollView style={{ borderRightWidth: 1, borderRightColor: "lightgrey" }}>
+              <Option>1</Option>
+              <Option>2</Option>
+              <Option>3</Option>
+              <Option>4</Option>
+              <Option>5</Option>
+              <Option>6</Option>
+              <Option>7</Option>
+              <Option>8</Option>
+              <Option>9</Option>
+              <Option>10</Option>
+              <Option>11</Option>
+              <Option>12</Option>
+              <Option>13</Option>
+              <Option>14</Option>
+              <Option>15</Option>
+              <Option>16</Option>
+              <Option>17</Option>
+              <Option>18</Option>
+              <Option>19</Option>
+              <Option>20</Option>
+            </ScrollView>
+          </View>
+          <View style={{ flex: 0.5 }}>
+            <ScrollView style={{ borderRightWidth: 1, borderRightColor: "lightgrey" }}>
+              <Option>1</Option>
+              <Option>2</Option>
+              <Option>3</Option>
+              <Option>4</Option>
+              <Option>5</Option>
+              <Option>6</Option>
+              <Option>7</Option>
+              <Option>8</Option>
+              <Option>9</Option>
+              <Option>10</Option>
+              <Option>11</Option>
+              <Option>12</Option>
+              <Option>13</Option>
+              <Option>14</Option>
+              <Option>15</Option>
+              <Option>16</Option>
+              <Option>17</Option>
+              <Option>18</Option>
+              <Option>19</Option>
+              <Option>20</Option>
+            </ScrollView>
+          </View>
+          <View style={{ flex: 0.5 }}>
+            <ScrollView>
+              <Option>1</Option>
+              <Option>2</Option>
+              <Option>3</Option>
+              <Option>4</Option>
+              <Option>5</Option>
+              <Option>6</Option>
+              <Option>7</Option>
+              <Option>8</Option>
+              <Option>9</Option>
+              <Option>10</Option>
+              <Option>11</Option>
+              <Option>12</Option>
+              <Option>13</Option>
+              <Option>14</Option>
+              <Option>15</Option>
+              <Option>16</Option>
+              <Option>17</Option>
+              <Option>18</Option>
+              <Option>19</Option>
+              <Option>20</Option>
+            </ScrollView>
+          </View>
+        </Options>
+      </CategoryContainer>
+      <SelectedContainer>
+        <SelectedContainerHeader>
+          <Text style={{ margin: 15, fontSize: 14 }}>선택한 업종</Text>
+        </SelectedContainerHeader>
+        <SelectedContainerBody>
+          <Selected></Selected>
+          <Selected></Selected>
+        </SelectedContainerBody>
+      </SelectedContainer>
+      <Button>
+        <ButtonText>다음</ButtonText>
+      </Button>
+    </Container>
+  );
+};
