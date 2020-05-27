@@ -6,18 +6,15 @@ import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
 const SelectedContainer = styled.View`
-  flex: 1;
-  height: 32px;
-  margin: 0px 10px;
   border-radius: 8px;
   background-color: rgba(255, 167, 38, 0.4);
+  margin-bottom: 5px;
 `;
 
 const Data = styled.View`
-  flex: 1;
   flex-direction: row;
   align-items: center;
-  height: 50px;
+
   justify-content: space-between;
 `;
 
