@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Dimensions, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Dimensions, Text, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 import Selected from "../screens/Selected";
@@ -41,7 +41,7 @@ const Option = styled.Text`
 `;
 
 const SelectedContainer = styled.View`
-  flex: 2;
+  flex: 3;
   width: ${WIDTH * 0.85}px;
   background-color: #f0f0f0;
   margin-top: 20px;
@@ -49,14 +49,11 @@ const SelectedContainer = styled.View`
   flex-direction: column;
 `;
 
-const SelectedContainerHeader = styled.View`
-  font-size: 14px;
-`;
+const SelectedContainerHeader = styled.View``;
 
 const SelectedContainerBody = styled.View`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -168,11 +165,14 @@ export default () => {
       </CategoryContainer>
       <SelectedContainer>
         <SelectedContainerHeader>
-          <Text style={{ margin: 15, fontSize: 14 }}>선택한 업종</Text>
+          <Text style={{ margin: 9, fontSize: 14 }}>선택한 업종</Text>
         </SelectedContainerHeader>
         <SelectedContainerBody>
-          <Selected></Selected>
-          <Selected></Selected>
+          <Selected number={1}></Selected>
+          <Selected number={1}></Selected>
+          <Selected number={1}></Selected>
+          <Selected number={1}></Selected>
+          <Selected number={1}></Selected>
         </SelectedContainerBody>
       </SelectedContainer>
       <Button>
