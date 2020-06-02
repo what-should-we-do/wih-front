@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, Dimensions, Text, ScrollView } from "react-native";
+import { View, Dimensions, Text, StyleSheet, ScrollView } from "react-native";
 import styled from "styled-components/native";
+import RNPickerSelect from "react-native-picker-select";
 
 import Selected from "../screens/Selected";
-import { withTheme } from "react-native-elements";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -14,13 +14,15 @@ const Container = styled.View`
 `;
 
 const CategoryContainer = styled.View`
-  flex: 6;
+  flex: 1;
   width: ${WIDTH * 0.85}px;
-  background-color: #f0f0f0;
   margin-top: 30px;
-  border: solid grey;
   border-radius: 8px;
   flex-direction: column;
+`;
+
+const Category = styled.View`
+  flex: 1;
 `;
 
 const Header = styled.View`
@@ -41,7 +43,7 @@ const Option = styled.Text`
 `;
 
 const SelectedContainer = styled.View`
-  flex: 3;
+  flex: 1;
   width: ${WIDTH * 0.85}px;
   background-color: #f0f0f0;
   margin-top: 20px;
@@ -72,108 +74,182 @@ const ButtonText = styled.Text`
   text-align: center;
 `;
 export default () => {
-  const [category, setCategory] = useState({
-    major: "",
-    mid: "",
-    sub: "",
+  const [major, setMajor] = useState("");
+  const [mid, setMid] = useState("");
+  const [sub, setSub] = useState("");
+
+  const [isMajorSelected, setIsMajorSelected] = useState(false);
+  const [isMidSelected, setIsMidSelected] = useState(false);
+  const [isSubSelected, setIsSubSelected] = useState(false);
+
+  const [count, setCount] = useState(0);
+  const [selected, setSelected] = useState([]);
+
+  const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 18,
+      borderWidth: 1,
+      borderRadius: 4,
+      color: "black",
+      padding: 10, // to ensure the text is never behind the icon
+      textAlign: "center",
+    },
+    inputAndroid: {
+      fontSize: 14,
+      borderWidth: 1,
+      borderRadius: 5,
+      color: "black",
+      padding: 10,
+      textAlign: "center",
+    },
   });
-  const [majorPressed, setMajorPressed] = useState(false);
-  const [midPressed, setMidPressed] = useState(false);
-  const [minorPressed, setMinorPressed] = useState(false);
+
+  const pickerDisabledStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 18,
+      borderWidth: 1,
+      borderRadius: 4,
+      borderColor: "lightgrey",
+      color: "black",
+      padding: 10, // to ensure the text is never behind the icon
+      textAlign: "center",
+    },
+    inputAndroid: {
+      fontSize: 14,
+      borderWidth: 1,
+      borderRadius: 5,
+      borderColor: "lightgrey",
+      color: "black",
+      padding: 10,
+      textAlign: "center",
+    },
+  });
+
+  // if (isMajorSelected === true && isMidSelected === true && isSubSelected === true) {
+  //   setSelected([...selected].push({ major: major, mid: mid, sub: sub }));
+  // }
+
+  // const mapToComponent = (selected) => {
+  //   return selected.map((number, data, i) => (
+  //     <Selected key={i} number={number} data={{ data }}></Selected>
+  //   ));
+  // };
+
   return (
     <Container>
       <CategoryContainer>
-        <Header>
-          <Text style={{ textAlign: "center", fontSize: 16, margin: 15 }}>대분류</Text>
-          <Text style={{ textAlign: "center", fontSize: 16, margin: 15 }}>중분류</Text>
-          <Text style={{ textAlign: "center", fontSize: 16, margin: 15 }}>소분류</Text>
-        </Header>
-        <Options>
-          <View style={{ flex: 0.5 }}>
-            <ScrollView style={{ borderRightWidth: 1, borderRightColor: "lightgrey" }}>
-              <Option>1</Option>
-              <Option>2</Option>
-              <Option>3</Option>
-              <Option>4</Option>
-              <Option>5</Option>
-              <Option>6</Option>
-              <Option>7</Option>
-              <Option>8</Option>
-              <Option>9</Option>
-              <Option>10</Option>
-              <Option>11</Option>
-              <Option>12</Option>
-              <Option>13</Option>
-              <Option>14</Option>
-              <Option>15</Option>
-              <Option>16</Option>
-              <Option>17</Option>
-              <Option>18</Option>
-              <Option>19</Option>
-              <Option>20</Option>
-            </ScrollView>
-          </View>
-          <View style={{ flex: 0.5 }}>
-            <ScrollView style={{ borderRightWidth: 1, borderRightColor: "lightgrey" }}>
-              <Option>1</Option>
-              <Option>2</Option>
-              <Option>3</Option>
-              <Option>4</Option>
-              <Option>5</Option>
-              <Option>6</Option>
-              <Option>7</Option>
-              <Option>8</Option>
-              <Option>9</Option>
-              <Option>10</Option>
-              <Option>11</Option>
-              <Option>12</Option>
-              <Option>13</Option>
-              <Option>14</Option>
-              <Option>15</Option>
-              <Option>16</Option>
-              <Option>17</Option>
-              <Option>18</Option>
-              <Option>19</Option>
-              <Option>20</Option>
-            </ScrollView>
-          </View>
-          <View style={{ flex: 0.5 }}>
-            <ScrollView>
-              <Option>1</Option>
-              <Option>2</Option>
-              <Option>3</Option>
-              <Option>4</Option>
-              <Option>5</Option>
-              <Option>6</Option>
-              <Option>7</Option>
-              <Option>8</Option>
-              <Option>9</Option>
-              <Option>10</Option>
-              <Option>11</Option>
-              <Option>12</Option>
-              <Option>13</Option>
-              <Option>14</Option>
-              <Option>15</Option>
-              <Option>16</Option>
-              <Option>17</Option>
-              <Option>18</Option>
-              <Option>19</Option>
-              <Option>20</Option>
-            </ScrollView>
-          </View>
-        </Options>
+        <Category>
+          <Text
+            style={{ fontSize: 18, fontWeight: "bold", marginHorizontal: 5, marginVertical: 10 }}
+          >
+            대분류
+          </Text>
+          <RNPickerSelect
+            onValueChange={(value) => {
+              if (value !== null) {
+                setMajor(`${value}`);
+                console.log("major = " + major);
+                setIsMajorSelected(!isMajorSelected);
+              } else {
+                setIsMajorSelected(false);
+                value = null;
+              }
+            }}
+            placeholder={{
+              label: "대분류를 선택하세요",
+            }}
+            style={pickerSelectStyles}
+            items={[
+              { label: "대분류1", value: "대분류1" },
+              { label: "대분류2", value: "대분류2" },
+              { label: "대분류3", value: "대분류3" },
+              { label: "대분류4", value: "대분류4" },
+              { label: "대분류5", value: "대분류5" },
+              { label: "대분류6", value: "대분류6" },
+              { label: "대분류7", value: "대분류7" },
+              { label: "대분류8", value: "대분류8" },
+              { label: "대분류9", value: "대분류9" },
+              { label: "대분류10", value: "대분류10" },
+            ]}
+          />
+        </Category>
+        <Category>
+          <Text
+            style={{ fontSize: 18, fontWeight: "bold", marginHorizontal: 5, marginVertical: 10 }}
+          >
+            중분류
+          </Text>
+          <RNPickerSelect
+            onValueChange={(value) => {
+              if (value !== null) {
+                setIsMidSelected(!isMidSelected);
+                setMid(value);
+                console.log(mid);
+              } else {
+                setIsMidSelected(false);
+                value = null;
+              }
+            }}
+            placeholder={{
+              label: "중분류를 선택하세요",
+            }}
+            style={isMajorSelected ? pickerSelectStyles : pickerDisabledStyles}
+            items={[
+              { label: "중분류1", value: "중분류1" },
+              { label: "중분류2", value: "중분류2" },
+              { label: "중분류3", value: "중분류3" },
+              { label: "중분류4", value: "중분류4" },
+              { label: "중분류5", value: "중분류5" },
+              { label: "중분류6", value: "중분류6" },
+              { label: "중분류7", value: "중분류7" },
+              { label: "중분류8", value: "중분류8" },
+              { label: "중분류9", value: "중분류9" },
+              { label: "중분류10", value: "중분류10" },
+            ]}
+            disabled={!isMajorSelected}
+          />
+        </Category>
+        <Category>
+          <Text
+            style={{ fontSize: 18, fontWeight: "bold", marginHorizontal: 5, marginVertical: 10 }}
+          >
+            소분류
+          </Text>
+          <RNPickerSelect
+            onValueChange={(value) => {
+              if (value !== null) {
+                setIsSubSelected(!isSubSelected);
+                setSub(value);
+                console.log(sub);
+              } else {
+                setIsSubSelected(false);
+                value = null;
+              }
+            }}
+            placeholder={{
+              label: "소분류를 선택하세요",
+            }}
+            style={isMidSelected ? pickerSelectStyles : pickerDisabledStyles}
+            items={[
+              { label: "소분류1", value: "소분류1" },
+              { label: "소분류2", value: "소분류2" },
+              { label: "소분류3", value: "소분류3" },
+              { label: "소분류4", value: "소분류4" },
+              { label: "소분류5", value: "소분류5" },
+              { label: "소분류6", value: "소분류6" },
+              { label: "소분류7", value: "소분류7" },
+              { label: "소분류8", value: "소분류8" },
+              { label: "소분류9", value: "소분류9" },
+              { label: "소분류10", value: "소분류10" },
+            ]}
+            disabled={!isMidSelected}
+          />
+        </Category>
       </CategoryContainer>
       <SelectedContainer>
-        <SelectedContainerHeader>
-          <Text style={{ margin: 9, fontSize: 14 }}>선택한 업종</Text>
-        </SelectedContainerHeader>
-        <SelectedContainerBody>
-          <Selected number={1}></Selected>
-          <Selected number={1}></Selected>
-          <Selected number={1}></Selected>
-          <Selected number={1}></Selected>
-          <Selected number={1}></Selected>
-        </SelectedContainerBody>
+        <Text style={{ margin: 10, fontSize: 14 }}>선택한 업종</Text>
+        {/* {mapToComponent(selected)} */}
+        <Selected number={count} data={{ major: major, mid: mid, sub: sub }}></Selected>
       </SelectedContainer>
       <Button>
         <ButtonText>다음</ButtonText>

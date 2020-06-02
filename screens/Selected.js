@@ -8,7 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 const SelectedContainer = styled.View`
   border-radius: 8px;
   background-color: rgba(255, 167, 38, 0.4);
-  margin-bottom: 5px;
+  margin: 9px 10px;
 `;
 
 const Data = styled.View`
@@ -31,8 +31,7 @@ const Selected = ({ number = 0, data = {} }) => {
       />
       <Data>
         <Text style={{ marginLeft: 10, marginRight: 5, fontSize: 14 }}>
-          {/* {`${data.major}/${data.mid}/${data.sub}/${number}`} */}
-          음식/한식/김치찌개
+          {`${data.major} - ${data.mid} - ${data.sub}`}
         </Text>
         <TouchableOpacity style={{}}>
           <Ionicons style={{ marginRight: 10 }} name={iconName} size={iconSize}></Ionicons>
