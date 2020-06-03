@@ -53,7 +53,7 @@ export default function App() {
           <NavController />
         </AuthProvider>
       </NavigationContainer>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
     </>
   ) : (
     <AppLoading startAsync={loadAssets} onFinish={onFinish} onError={console.error} />
