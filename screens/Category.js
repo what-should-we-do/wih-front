@@ -74,19 +74,19 @@ const ButtonText = styled.Text`
 const iconName = Platform.OS === "ios" ? "ios-close" : "md-close";
 const iconSize = Platform.OS === "ios" ? 30 : 20;
 
-export default () => {
+export default ({ navigation }) => {
   const [major, setMajor] = useState(null);
   const [mid, setMid] = useState(null);
   const [sub, setSub] = useState(null);
-
   const [isMajorSelected, setIsMajorSelected] = useState(false);
   const [isMidSelected, setIsMidSelected] = useState(false);
   const [isSubSelected, setIsSubSelected] = useState(false);
   const [isAll, setIsAll] = useState(0);
+  const [selected, setSelected] = useState(null);
+
   useEffect(() => {
     Platform.OS === "ios" ? null : initSelected(major, mid, sub);
   }, [isAll]);
-  const [selected, setSelected] = useState(null);
 
   const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
@@ -107,12 +107,6 @@ export default () => {
     },
   });
 
-  console.log("@@@@@" + major + " " + mid + " " + sub);
-  console.log("major : " + isMajorSelected);
-  console.log("mid : " + isMidSelected);
-  console.log("sub: " + isSubSelected);
-  console.log("sel" + selected);
-
   const isAllSelected = () => {
     if (isMajorSelected === true && isMidSelected === true && isSubSelected === true) {
     }
@@ -120,7 +114,6 @@ export default () => {
 
   const initSelected = (major, mid, sub) => {
     // 사용자가 대분류, 중분류, 소분류를 모두 선택했을 때
-    console.log("값이 잘 전달되었다!");
 
     setIsMajorSelected(false);
     setIsMidSelected(false);
@@ -254,7 +247,6 @@ export default () => {
               if (value !== null) {
                 setSub(value);
                 setIsSubSelected(true);
-                console.log("qwfqwwfqwfqfw" + isSubSelected);
                 setIsAll(isAll + 1);
               } else {
                 setIsSubSelected(false);
@@ -318,7 +310,7 @@ export default () => {
             }
           })}
       </SelectedContainer>
-      <Button>
+      <Button onPress={() => navigation.navigate("Business", { selected })}>
         <ButtonText>다음</ButtonText>
       </Button>
     </Container>

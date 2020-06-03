@@ -99,7 +99,7 @@ export default function({ navigation }) {
         <Input
           placeholder={"경기도 용인시 처인구 역북동"}
           leftIcon={
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Icon type="simple-line-icon" name="menu" iconStyle={{ marginRight: 8 }} />
             </TouchableOpacity>
           }
