@@ -37,7 +37,7 @@ export default function App() {
       <NavigationContainer>
         <Stack />
       </NavigationContainer>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
     </>
   ) : (
     <AppLoading startAsync={loadAssets} onFinish={onFinish} onError={console.error} />
