@@ -21,17 +21,6 @@ const cacheImages = (images) =>
 
 const cacheFonts = (fonts) => fonts.map((font) => [Font.loadAsync(font), Font.loadAsync(font)]);
 
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem("@storage_Key");
-    if (value !== null) {
-      // value previously stored
-    }
-  } catch (e) {
-    // error reading value
-  }
-};
-
 export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,9 +39,7 @@ export default function App() {
   const preLoad = async () => {
     try {
       const logInStatus = await AsyncStorage.getItem("loginStatus");
-      if (value == true) {
-        setIsLoggedIn(true);
-      }
+      setIsLoggedIn(logInStatus);
     } catch (e) {
       console.log(e);
     }
