@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { View, Dimensions, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Platform,
+} from "react-native";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
-
-import Selected from "../screens/Selected";
+import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -25,23 +33,6 @@ const Category = styled.View`
   flex: 1;
 `;
 
-const Header = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  border-bottom-width: 1px;
-  border-bottom-color: lightgrey;
-`;
-
-const Options = styled.View`
-  flex: 1;
-  flex-direction: row;
-`;
-
-const Option = styled.Text`
-  text-align: center;
-  margin: 10px 0;
-`;
-
 const SelectedContainer = styled.View`
   flex: 1;
   width: ${WIDTH * 0.85}px;
@@ -51,11 +42,17 @@ const SelectedContainer = styled.View`
   flex-direction: column;
 `;
 
-const SelectedContainerHeader = styled.View``;
+const Selected = styled.View`
+  background-color: rgba(255, 167, 38, 0.4);
+  border-radius: 8px;
+  margin: 9px 10px;
+`;
 
-const SelectedContainerBody = styled.View`
-  flex-flow: row wrap;
-  justify-content: space-evenly;
+const Data = styled.View`
+  flex-direction: row;
+  align-items: center;
+
+  justify-content: space-between;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -73,17 +70,20 @@ const ButtonText = styled.Text`
   font-size: 16px;
   text-align: center;
 `;
+
+const iconName = Platform.OS === "ios" ? "ios-close" : "md-close";
+const iconSize = Platform.OS === "ios" ? 30 : 20;
+
 export default () => {
-  const [major, setMajor] = useState("");
-  const [mid, setMid] = useState("");
-  const [sub, setSub] = useState("");
+  const [major, setMajor] = useState(null);
+  const [mid, setMid] = useState(null);
+  const [sub, setSub] = useState(null);
 
   const [isMajorSelected, setIsMajorSelected] = useState(false);
   const [isMidSelected, setIsMidSelected] = useState(false);
   const [isSubSelected, setIsSubSelected] = useState(false);
 
-  const [count, setCount] = useState(0);
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState(null);
 
   const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
@@ -104,59 +104,52 @@ export default () => {
     },
   });
 
-  const pickerDisabledStyles = StyleSheet.create({
-    inputIOS: {
-      fontSize: 18,
-      borderWidth: 1,
-      borderRadius: 4,
-      borderColor: "lightgrey",
-      color: "black",
-      padding: 10, // to ensure the text is never behind the icon
-      textAlign: "center",
-    },
-    inputAndroid: {
-      fontSize: 14,
-      borderWidth: 1,
-      borderRadius: 5,
-      borderColor: "lightgrey",
-      color: "black",
-      padding: 10,
-      textAlign: "center",
-    },
-  });
+  console.log("@@@@@" + major + " " + mid + " " + sub);
+  console.log("major : " + isMajorSelected);
+  console.log("mid : " + isMidSelected);
+  console.log("sub: " + isSubSelected);
+  console.log("sel" + selected);
 
-  // if (isMajorSelected === true && isMidSelected === true && isSubSelected === true) {
-  //   setSelected([...selected].push({ major: major, mid: mid, sub: sub }));
-  // }
+  const mapToComponent = (major, mid, sub) => {
+    // 사용자가 대분류, 중분류, 소분류를 모두 선택했을 때
+    console.log("값이 잘 전달되었다!");
 
-  // const mapToComponent = (selected) => {
-  //   return selected.map((number, data, i) => (
-  //     <Selected key={i} number={number} data={{ data }}></Selected>
-  //   ));
-  // };
+    setIsMajorSelected(false);
+    setIsMidSelected(false);
+    setIsMidSelected(false);
+    if (selected === null) setSelected([{ major: major, mid: mid, sub: sub }]);
+    else setSelected([...selected, { major: major, mid: mid, sub: sub }]);
+    // setIsSubSelected(false);
+  };
 
   return (
     <Container>
       <CategoryContainer>
         <Category>
           <Text
-            style={{ fontSize: 18, fontWeight: "bold", marginHorizontal: 5, marginVertical: 10 }}
+            style={{
+              fontSize: 18,
+              fontWeight: "600",
+              marginHorizontal: 5,
+              marginVertical: 10,
+            }}
           >
             대분류
           </Text>
           <RNPickerSelect
             onValueChange={(value) => {
               if (value !== null) {
-                setMajor(`${value}`);
-                console.log("major = " + major);
-                setIsMajorSelected(!isMajorSelected);
+                setMajor(value);
+                setIsMajorSelected(true);
               } else {
                 setIsMajorSelected(false);
                 value = null;
+                setMajor(null);
               }
             }}
             placeholder={{
               label: "대분류를 선택하세요",
+              value: null,
             }}
             style={pickerSelectStyles}
             items={[
@@ -175,25 +168,41 @@ export default () => {
         </Category>
         <Category>
           <Text
-            style={{ fontSize: 18, fontWeight: "bold", marginHorizontal: 5, marginVertical: 10 }}
+            style={
+              isMajorSelected
+                ? {
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                  }
+                : {
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                    color: "lightgrey",
+                  }
+            }
           >
             중분류
           </Text>
           <RNPickerSelect
             onValueChange={(value) => {
               if (value !== null) {
-                setIsMidSelected(!isMidSelected);
+                setIsMidSelected(true);
                 setMid(value);
-                console.log(mid);
               } else {
                 setIsMidSelected(false);
                 value = null;
+                setMid(null);
               }
             }}
             placeholder={{
               label: "중분류를 선택하세요",
+              value: null,
             }}
-            style={isMajorSelected ? pickerSelectStyles : pickerDisabledStyles}
+            style={pickerSelectStyles}
             items={[
               { label: "중분류1", value: "중분류1" },
               { label: "중분류2", value: "중분류2" },
@@ -211,25 +220,45 @@ export default () => {
         </Category>
         <Category>
           <Text
-            style={{ fontSize: 18, fontWeight: "bold", marginHorizontal: 5, marginVertical: 10 }}
+            style={
+              isMidSelected
+                ? {
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                  }
+                : {
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                    color: "lightgrey",
+                  }
+            }
           >
             소분류
           </Text>
           <RNPickerSelect
+            value={sub}
             onValueChange={(value) => {
               if (value !== null) {
-                setIsSubSelected(!isSubSelected);
+                setIsSubSelected(true);
                 setSub(value);
-                console.log(sub);
+
+                Platform.OS === "ios" ? null : mapToComponent(major, mid, sub);
               } else {
                 setIsSubSelected(false);
                 value = null;
+                setSub(null);
               }
             }}
+            onClose={() => mapToComponent(major, mid, sub)}
             placeholder={{
               label: "소분류를 선택하세요",
+              value: null,
             }}
-            style={isMidSelected ? pickerSelectStyles : pickerDisabledStyles}
+            style={pickerSelectStyles}
             items={[
               { label: "소분류1", value: "소분류1" },
               { label: "소분류2", value: "소분류2" },
@@ -248,8 +277,37 @@ export default () => {
       </CategoryContainer>
       <SelectedContainer>
         <Text style={{ margin: 10, fontSize: 14 }}>선택한 업종</Text>
-        {/* {mapToComponent(selected)} */}
-        <Selected number={count} data={{ major: major, mid: mid, sub: sub }}></Selected>
+        {selected &&
+          selected.map((data, index) => {
+            return (
+              <Selected>
+                <Badge
+                  value={index + 1}
+                  status="error"
+                  containerStyle={{ position: "absolute", top: -12, left: 5 }}
+                />
+                <Data>
+                  <Text style={{ marginLeft: 10, marginRight: 5, fontSize: 14 }}>
+                    {`${data.major} - ${data.mid} - ${data.sub}`}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelected(selected.filter((_, i) => i !== index));
+                    }}
+                  >
+                    <Ionicons
+                      style={{ marginRight: 10 }}
+                      name={iconName}
+                      size={iconSize}
+                    ></Ionicons>
+                  </TouchableOpacity>
+                </Data>
+              </Selected>
+            );
+            {
+              /* <Selected key={index} number={index + 1} data={data} />; */
+            }
+          })}
       </SelectedContainer>
       <Button>
         <ButtonText>다음</ButtonText>
