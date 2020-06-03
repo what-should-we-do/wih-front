@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
+import PropTypes from "prop-types";
 
 const Container = styled.View`
   flex: 1;
@@ -57,11 +58,11 @@ const ButtonText = styled.Text`
   color: white;
 `;
 
-export default function LogIn() {
+function LoginPresenter({ email, password, onSubmit }) {
   return (
     <Container>
       <LogoContainer>
-        <Logo source={require("../../assets/logo.png")} resizeMode="center" />
+        <Logo source={require("../../../assets/logo.png")} resizeMode="center" />
       </LogoContainer>
       <InputContainer>
         <EmptyView>
@@ -69,8 +70,14 @@ export default function LogIn() {
             placeholder="Email"
             textContentType="emailAddress"
             keyboardType="email-address"
+            {...email}
           />
-          <TextInput placeholder="Password" secureTextEntry textContentType="password" />
+          <TextInput
+            placeholder="Password"
+            secureTextEntry
+            textContentType="password"
+            {...password}
+          />
           <AdditionalLink>
             <AdditionalText>Not having account?</AdditionalText>
           </AdditionalLink>
@@ -78,10 +85,18 @@ export default function LogIn() {
             <AdditionalText>Forgot password?</AdditionalText>
           </AdditionalLink>
         </EmptyView>
-        <LogInButton>
+        <LogInButton onPress={onSubmit}>
           <ButtonText>Log In</ButtonText>
         </LogInButton>
       </InputContainer>
     </Container>
   );
 }
+
+LoginPresenter.propTypes = {
+  email: PropTypes.object.isRequired,
+  password: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+export default LoginPresenter;

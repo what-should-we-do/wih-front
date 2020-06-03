@@ -7,8 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
 
-import Stack from "./navigation/Stack";
-import Auth from "./navigation/Auth";
+import { AuthProvider } from "./AuthContext";
+import NavController from "./components/NavController";
 
 const cacheImages = (images) =>
   images.map((image) => {
@@ -23,7 +23,7 @@ const cacheFonts = (fonts) => fonts.map((font) => [Font.loadAsync(font), Font.lo
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   const loadAssets = () => {
     const images = cacheImages([
@@ -36,22 +36,23 @@ export default function App() {
 
   const onFinish = () => setIsReady(true);
 
-  const preLoad = async () => {
-    try {
-      const logInStatus = await AsyncStorage.getItem("loginStatus");
-      setIsLoggedIn(logInStatus);
-    } catch (e) {
-      console.log(e);
-    }
+  const preload = async () => {
+    const isLoggedIn = await AsyncStorage.getItem("loginStatus");
+    if (isLoggedIn !== "true") setIsLoggedIn(false);
+    else setIsLoggedIn(true);
   };
 
   useEffect(() => {
-    preLoad();
+    preload();
   }, []);
 
-  return isReady ? (
+  return isReady && isLoggedIn !== null ? (
     <>
-      <NavigationContainer>{isLoggedIn ? <Stack /> : <Auth />}</NavigationContainer>
+      <NavigationContainer>
+        <AuthProvider isLoggedIn={isLoggedIn}>
+          <NavController />
+        </AuthProvider>
+      </NavigationContainer>
       <StatusBar barStyle="light-content" />
     </>
   ) : (

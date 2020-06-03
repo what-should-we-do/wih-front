@@ -49,7 +49,7 @@ const Desc = styled.View`
   border-radius: 8px;
 `;
 
-export default function({ navigation }) {
+export default function Home({ navigation }) {
   return (
     <Container>
       <View style={{ flex: 2, backgroundColor: "gray" }}>
