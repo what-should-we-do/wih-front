@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Dimensions,
@@ -82,7 +82,10 @@ export default () => {
   const [isMajorSelected, setIsMajorSelected] = useState(false);
   const [isMidSelected, setIsMidSelected] = useState(false);
   const [isSubSelected, setIsSubSelected] = useState(false);
-
+  const [isAll, setIsAll] = useState(0);
+  useEffect(() => {
+    Platform.OS === "ios" ? null : initSelected(major, mid, sub);
+  }, [isAll]);
   const [selected, setSelected] = useState(null);
 
   const pickerSelectStyles = StyleSheet.create({
@@ -110,15 +113,22 @@ export default () => {
   console.log("sub: " + isSubSelected);
   console.log("sel" + selected);
 
-  const mapToComponent = (major, mid, sub) => {
+  const isAllSelected = () => {
+    if (isMajorSelected === true && isMidSelected === true && isSubSelected === true) {
+    }
+  };
+
+  const initSelected = (major, mid, sub) => {
     // 사용자가 대분류, 중분류, 소분류를 모두 선택했을 때
     console.log("값이 잘 전달되었다!");
 
     setIsMajorSelected(false);
     setIsMidSelected(false);
-    setIsMidSelected(false);
-    if (selected === null) setSelected([{ major: major, mid: mid, sub: sub }]);
-    else setSelected([...selected, { major: major, mid: mid, sub: sub }]);
+    setIsSubSelected(false);
+    if (selected === null && major !== null && mid != null && sub != null)
+      setSelected([{ major: major, mid: mid, sub: sub }]);
+    else if (major !== null && mid != null && sub != null)
+      setSelected([...selected, { major: major, mid: mid, sub: sub }]);
     // setIsSubSelected(false);
   };
 
@@ -240,24 +250,23 @@ export default () => {
             소분류
           </Text>
           <RNPickerSelect
-            value={sub}
             onValueChange={(value) => {
               if (value !== null) {
-                setIsSubSelected(true);
                 setSub(value);
-
-                Platform.OS === "ios" ? null : mapToComponent(major, mid, sub);
+                setIsSubSelected(true);
+                console.log("qwfqwwfqwfqfw" + isSubSelected);
+                setIsAll(isAll + 1);
               } else {
                 setIsSubSelected(false);
                 value = null;
                 setSub(null);
               }
             }}
-            onClose={() => mapToComponent(major, mid, sub)}
             placeholder={{
               label: "소분류를 선택하세요",
               value: null,
             }}
+            onClose={() => initSelected(major, mid, sub)}
             style={pickerSelectStyles}
             items={[
               { label: "소분류1", value: "소분류1" },
@@ -280,7 +289,7 @@ export default () => {
         {selected &&
           selected.map((data, index) => {
             return (
-              <Selected>
+              <Selected key={index}>
                 <Badge
                   value={index + 1}
                   status="error"
