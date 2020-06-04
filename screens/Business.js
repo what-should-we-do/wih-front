@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Dimensions, Text, Platform } from "react-native";
+import { View, Dimensions, Text, TouchableOpacity, Platform, ScrollView } from "react-native";
 import styled from "styled-components/native";
-import { ButtonGroup } from "react-native-elements";
+import { ListItem, Badge, ButtonGroup, Rating, Avatar, Icon, Overlay } from "react-native-elements";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -14,14 +15,9 @@ const Container = styled.View`
 const BusinessContainer = styled.View`
   flex: 3;
   width: ${WIDTH * 0.85}px;
-  background-color: #f0f0f0;
   margin-top: 30px;
   border-radius: 8px;
   flex-direction: column;
-`;
-
-const Category = styled.View`
-  flex: 1;
 `;
 
 const SelectedContainer = styled.View`
@@ -65,15 +61,167 @@ const ButtonText = styled.Text`
 const iconName = Platform.OS === "ios" ? "ios-close" : "md-close";
 const iconSize = Platform.OS === "ios" ? 30 : 20;
 
+const updateIndex = (selectedIndex) => {
+  setSelectedIndex(selectedIndex);
+};
+
 export default ({ route, navigation }) => {
-  console.log(route.params);
+  const [visible, setVisible] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [business, setBusiness] = useState([{ name: "", rating: "" }]);
+
+  const buttons = ["업종1", "업종2", "업종3"];
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
   return (
     <Container>
       <BusinessContainer>
-        <Category></Category>
+        <ButtonGroup
+          onPress={(index) => setSelectedIndex(index)}
+          selectedIndex={selectedIndex}
+          buttons={buttons}
+          selectedButtonStyle={{ backgroundColor: "rgb(255, 167, 38)" }}
+          containerStyle={{ height: 36 }}
+        />
+        <ScrollView>
+          {/* 예시를 들기 위함. component mapping 예정 */}
+          <ListItem
+            leftAvatar={
+              <Avatar
+                size="medium"
+                icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
+              />
+            }
+            title="투썸플레이스 역북점"
+            subtitle={
+              <Rating
+                imageSize={14}
+                readonly
+                startingValue={1}
+                coun
+                style={{
+                  alignItems: "flex-start",
+                }}
+              />
+            }
+            rightSubtitle={
+              <TouchableOpacity>
+                <Icon name="plus" type="simple-line-icon" color="black" size={16} />
+              </TouchableOpacity>
+            }
+            titleStyle={{
+              color: "black",
+              fontSize: 16,
+              marginBottom: 4,
+              width: "140%",
+            }}
+            subtitleStyle={{ color: "black", fontWeight: "300" }}
+            containerStyle={{ height: 64 }}
+            bottomDivider
+            onPress={toggleOverlay}
+          />
+
+          <ListItem
+            leftAvatar={
+              <Avatar
+                size="medium"
+                icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
+              />
+            }
+            title="스타벅스 김량장점"
+            subtitle={
+              <Rating
+                imageSize={14}
+                readonly
+                startingValue={2}
+                coun
+                style={{ alignItems: "flex-start" }}
+              />
+            }
+            rightSubtitle={
+              <TouchableOpacity>
+                <Icon name="plus" type="simple-line-icon" color="black" size={16} />
+              </TouchableOpacity>
+            }
+            titleStyle={{
+              color: "black",
+              fontSize: 16,
+              marginBottom: 4,
+              width: "140%",
+            }}
+            subtitleStyle={{ color: "black", fontWeight: "300" }}
+            containerStyle={{ height: 64 }}
+            bottomDivider
+            onPress={toggleOverlay}
+          />
+
+          <ListItem
+            leftAvatar={
+              <Avatar
+                size="medium"
+                icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
+              />
+            }
+            title="커피테이너 명지대점"
+            subtitle={
+              <Rating
+                imageSize={14}
+                readonly
+                startingValue={3}
+                coun
+                style={{ alignItems: "flex-start" }}
+              />
+            }
+            rightSubtitle={
+              <TouchableOpacity>
+                <Icon name="plus" type="simple-line-icon" color="black" size={16} />
+              </TouchableOpacity>
+            }
+            titleStyle={{
+              color: "black",
+              fontSize: 16,
+              marginBottom: 4,
+              width: "140%",
+            }}
+            subtitleStyle={{ color: "black", fontWeight: "300" }}
+            containerStyle={{ height: 64 }}
+            bottomDivider
+            onPress={toggleOverlay}
+          />
+          <Overlay
+            isVisible={visible}
+            onBackdropPress={toggleOverlay}
+            overlayStyle={{
+              width: WIDTH * 0.85,
+              height: HEIGHT * 0.5,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Text>업소 정보 창</Text>
+            </View>
+          </Overlay>
+        </ScrollView>
       </BusinessContainer>
       <SelectedContainer>
         <Text style={{ margin: 10, fontSize: 14 }}>선택한 업종</Text>
+        <Selected>
+          <Badge
+            value={1}
+            status="error"
+            containerStyle={{ position: "absolute", top: -12, left: 5 }}
+          />
+          <Data>
+            <Text style={{ marginLeft: 10, marginRight: 5, fontSize: 14 }}>스타벅스 김량장점</Text>
+            <TouchableOpacity onPress={() => {}}>
+              <Ionicons style={{ marginRight: 10 }} name={iconName} size={iconSize}></Ionicons>
+            </TouchableOpacity>
+          </Data>
+        </Selected>
       </SelectedContainer>
       <Button onPress={() => navigation.navigate("Category")}>
         <ButtonText>다음</ButtonText>
