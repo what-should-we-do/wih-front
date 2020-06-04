@@ -74,7 +74,7 @@ export default ({ navigation }) => {
   const [isMidSelected, setIsMidSelected] = useState(false);
   const [isSubSelected, setIsSubSelected] = useState(false);
   const [isAll, setIsAll] = useState(0);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     Platform.OS === "ios" ? null : initSelected(major, mid, sub);
