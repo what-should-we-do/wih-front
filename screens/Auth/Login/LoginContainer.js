@@ -7,6 +7,11 @@ export default function LoginContainer({ navigation }) {
   const email = useInput("");
   const password = useInput("");
   const login = useLogIn();
+
+  function onSignUp() {
+    navigation.navigate("Sign Up");
+  }
+
   async function onSubmit() {
     if (email.value === "test@gmail.com" && password.value === "1234") {
       login();
@@ -14,5 +19,7 @@ export default function LoginContainer({ navigation }) {
     }
   }
 
-  return <LoginPresenter email={email} password={password} onSubmit={onSubmit} />;
+  return (
+    <LoginPresenter email={email} password={password} onSignUp={onSignUp} onSubmit={onSubmit} />
+  );
 }

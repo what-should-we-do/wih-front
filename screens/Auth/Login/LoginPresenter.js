@@ -10,10 +10,12 @@ const LogoContainer = styled.View`
   flex: 2;
   align-items: center;
   justify-content: center;
+  padding-top: 48px;
 `;
 
 const Logo = styled.Image`
-  box-shadow: 3px 3px 10px #aaa;
+  width: 128px;
+  height: 148px;
 `;
 
 const InputContainer = styled.View`
@@ -58,11 +60,11 @@ const ButtonText = styled.Text`
   color: white;
 `;
 
-function LoginPresenter({ email, password, onSubmit }) {
+function LoginPresenter({ email, password, onSignUp, onSubmit }) {
   return (
     <Container>
       <LogoContainer>
-        <Logo source={require("../../../assets/logo.png")} resizeMode="center" />
+        <Logo source={require("../../../assets/logo.png")} />
       </LogoContainer>
       <InputContainer>
         <EmptyView>
@@ -78,7 +80,7 @@ function LoginPresenter({ email, password, onSubmit }) {
             textContentType="password"
             {...password}
           />
-          <AdditionalLink>
+          <AdditionalLink onPress={onSignUp}>
             <AdditionalText>Not having account?</AdditionalText>
           </AdditionalLink>
           <AdditionalLink>
@@ -96,6 +98,7 @@ function LoginPresenter({ email, password, onSubmit }) {
 LoginPresenter.propTypes = {
   email: PropTypes.object.isRequired,
   password: PropTypes.object.isRequired,
+  onSignUp: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 
