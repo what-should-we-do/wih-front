@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Platform,
-} from "react-native";
+import { Dimensions, Text, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
-import { Avatar, Badge, Icon, withBadge } from "react-native-elements";
+import { Badge } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
@@ -107,11 +99,6 @@ export default ({ navigation }) => {
     },
   });
 
-  const isAllSelected = () => {
-    if (isMajorSelected === true && isMidSelected === true && isSubSelected === true) {
-    }
-  };
-
   const initSelected = (major, mid, sub) => {
     // 사용자가 대분류, 중분류, 소분류를 모두 선택했을 때
 
@@ -122,7 +109,6 @@ export default ({ navigation }) => {
       setSelected([{ major: major, mid: mid, sub: sub }]);
     else if (major !== null && mid != null && sub != null)
       setSelected([...selected, { major: major, mid: mid, sub: sub }]);
-    // setIsSubSelected(false);
   };
 
   return (
@@ -130,12 +116,22 @@ export default ({ navigation }) => {
       <CategoryContainer>
         <Category>
           <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              marginHorizontal: 5,
-              marginVertical: 10,
-            }}
+            style={
+              selected.length < 5
+                ? {
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                  }
+                : {
+                    fontSize: 18,
+                    fontWeight: "600",
+                    marginHorizontal: 5,
+                    marginVertical: 10,
+                    color: "lightgrey",
+                  }
+            }
           >
             대분류
           </Text>
@@ -155,24 +151,14 @@ export default ({ navigation }) => {
               value: null,
             }}
             style={pickerSelectStyles}
-            items={[
-              { label: "대분류1", value: "대분류1" },
-              { label: "대분류2", value: "대분류2" },
-              { label: "대분류3", value: "대분류3" },
-              { label: "대분류4", value: "대분류4" },
-              { label: "대분류5", value: "대분류5" },
-              { label: "대분류6", value: "대분류6" },
-              { label: "대분류7", value: "대분류7" },
-              { label: "대분류8", value: "대분류8" },
-              { label: "대분류9", value: "대분류9" },
-              { label: "대분류10", value: "대분류10" },
-            ]}
+            items={require("./major.json")}
+            disabled={selected.length >= 5}
           />
         </Category>
         <Category>
           <Text
             style={
-              isMajorSelected
+              isMajorSelected && selected.length < 5
                 ? {
                     fontSize: 18,
                     fontWeight: "600",
@@ -206,25 +192,14 @@ export default ({ navigation }) => {
               value: null,
             }}
             style={pickerSelectStyles}
-            items={[
-              { label: "중분류1", value: "중분류1" },
-              { label: "중분류2", value: "중분류2" },
-              { label: "중분류3", value: "중분류3" },
-              { label: "중분류4", value: "중분류4" },
-              { label: "중분류5", value: "중분류5" },
-              { label: "중분류6", value: "중분류6" },
-              { label: "중분류7", value: "중분류7" },
-              { label: "중분류8", value: "중분류8" },
-              { label: "중분류9", value: "중분류9" },
-              { label: "중분류10", value: "중분류10" },
-            ]}
-            disabled={!isMajorSelected}
+            items={require("./mid.json").filter((row) => row.parent === major)}
+            disabled={!isMajorSelected || selected.length >= 5}
           />
         </Category>
         <Category>
           <Text
             style={
-              isMidSelected
+              isMajorSelected && selected.length < 5
                 ? {
                     fontSize: 18,
                     fontWeight: "600",
@@ -260,19 +235,8 @@ export default ({ navigation }) => {
             }}
             onClose={() => initSelected(major, mid, sub)}
             style={pickerSelectStyles}
-            items={[
-              { label: "소분류1", value: "소분류1" },
-              { label: "소분류2", value: "소분류2" },
-              { label: "소분류3", value: "소분류3" },
-              { label: "소분류4", value: "소분류4" },
-              { label: "소분류5", value: "소분류5" },
-              { label: "소분류6", value: "소분류6" },
-              { label: "소분류7", value: "소분류7" },
-              { label: "소분류8", value: "소분류8" },
-              { label: "소분류9", value: "소분류9" },
-              { label: "소분류10", value: "소분류10" },
-            ]}
-            disabled={!isMidSelected}
+            items={require("./sub.json").filter((row) => row.parent === mid)}
+            disabled={!isMidSelected || selected.length >= 5}
           />
         </Category>
       </CategoryContainer>
