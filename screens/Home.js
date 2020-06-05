@@ -1,10 +1,12 @@
-import React, { Component, useState } from "react";
-import { View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet from "reanimated-bottom-sheet";
 import { Input, Icon } from "react-native-elements";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import * as Location from "expo-location";
+import MapView from "react-native-maps";
+
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View`
   flex: 1;
@@ -90,12 +92,32 @@ const renderContent = () => (
   </RecommendList>
 );
 
-export default function({ navigation }) {
-  const [searchValue, setSearchValue] = useState("");
+export default function ({ navigation }) {
+  // const [searchValue, setSearchValue] = useState("");
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [isLocaLoading, setIsLocaLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setIsLocaLoading(false);
+    })();
+
+    if (errorMsg) {
+      console.log(errorMsg);
+    }
+  });
 
   return (
     <Container>
-      <View style={{ marginHorizontal: 12 }}>
+      <View style={{ position: "absolute", marginHorizontal: 12, zIndex: 1000 }}>
         <Input
           placeholder={"경기도 용인시 처인구 역북동"}
           leftIcon={
@@ -109,6 +131,8 @@ export default function({ navigation }) {
             </TouchableOpacity>
           }
           containerStyle={{
+            width: WIDTH - 24,
+            position: "absolute",
             backgroundColor: "white",
             marginTop: 48,
             height: 48,
@@ -119,6 +143,22 @@ export default function({ navigation }) {
           }}
         />
       </View>
+      {!isLocaLoading && (
+        <MapView
+          provider="google"
+          region={{
+            latitude: location?.coords?.latitude || 37.78825,
+            longitude: location?.coords?.longitude || 127.4324,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          showsUserLocation
+          style={{
+            width: WIDTH,
+            height: HEIGHT,
+          }}
+        />
+      )}
       <BottomSheet
         snapPoints={["65%", "13%"]}
         initialSnap={1}
