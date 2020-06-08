@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
-import { Image, StatusBar } from "react-native";
+import { Image, StatusBar, Platform } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { Asset } from "expo-asset";
@@ -47,6 +47,8 @@ export default function App() {
     preload();
   }, []);
 
+  const statusBarStyle = Platform.OS === "ios" ? "dark-content" : "light-content";
+
   return isReady && isLoggedIn !== null ? (
     <>
       <NavigationContainer>
@@ -54,7 +56,7 @@ export default function App() {
           <NavController />
         </AuthProvider>
       </NavigationContainer>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={statusBarStyle} />
     </>
   ) : (
     <AppLoading startAsync={loadAssets} onFinish={onFinish} onError={console.error} />
