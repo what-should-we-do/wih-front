@@ -10,7 +10,6 @@ const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
 const Container = styled.View`
   flex: 1;
-  background-color: #a08ce7;
 `;
 
 const Button = styled.TouchableOpacity`
@@ -145,10 +144,9 @@ export default function ({ navigation }) {
       </View>
       {!isLocaLoading && (
         <MapView
-          provider="google"
-          region={{
-            latitude: location?.coords?.latitude || 37.78825,
-            longitude: location?.coords?.longitude || 127.4324,
+          initialRegion={{
+            latitude: location?.coords?.latitude || 37.226,
+            longitude: location?.coords?.longitude || 127.19336,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
