@@ -68,9 +68,22 @@ const updateIndex = (selectedIndex) => {
 export default ({ route, navigation }) => {
   const [visible, setVisible] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [business, setBusiness] = useState([{ name: "", rating: "" }]);
+  const [category, setCategory] = useState([]);
+  // const [business, setBusiness] = useState([]);
 
-  const buttons = ["업종1", "업종2", "업종3"];
+  const buttons = [];
+
+  for (let i in route.params.selected) {
+    buttons.push(route.params.selected[i].sub);
+  }
+
+  useEffect(() => {
+    setCategory(buttons);
+  }, []);
+
+  console.log(category);
+
+  const initBusiness = () => {};
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -82,7 +95,7 @@ export default ({ route, navigation }) => {
         <ButtonGroup
           onPress={(index) => setSelectedIndex(index)}
           selectedIndex={selectedIndex}
-          buttons={buttons}
+          buttons={category}
           selectedButtonStyle={{ backgroundColor: "rgb(255, 167, 38)" }}
           containerStyle={{ height: 36 }}
         />
