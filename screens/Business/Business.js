@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Dimensions, Text, TouchableOpacity, Platform, ScrollView } from "react-native";
+import {
+  ActivityIndicator,
+  View,
+  Image,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  Platform,
+  ScrollView,
+} from "react-native";
 import styled from "styled-components/native";
 import { ListItem, Badge, ButtonGroup, Rating, Avatar, Icon, Overlay } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,15 +22,16 @@ const Container = styled.View`
 `;
 
 const BusinessContainer = styled.View`
-  flex: 3;
+  flex: 1;
   width: ${WIDTH * 0.85}px;
+  /* background-color: #f0f0f0; */
   margin-top: 30px;
   border-radius: 8px;
   flex-direction: column;
 `;
 
 const SelectedContainer = styled.View`
-  flex: 2;
+  flex: 1;
   width: ${WIDTH * 0.85}px;
   background-color: #f0f0f0;
   margin-top: 20px;
@@ -52,6 +62,16 @@ const Button = styled.TouchableOpacity`
   justify-content: center;
 `;
 
+const OverlayButton = styled.TouchableOpacity`
+  flex: 1;
+  width: 100%;
+  height: 50px;
+  background-color: #f9a825;
+  margin: 18px 5px;
+  border-radius: 8px;
+  justify-content: center;
+`;
+
 const ButtonText = styled.Text`
   color: white;
   font-size: 16px;
@@ -61,15 +81,13 @@ const ButtonText = styled.Text`
 const iconName = Platform.OS === "ios" ? "ios-close" : "md-close";
 const iconSize = Platform.OS === "ios" ? 30 : 20;
 
-const updateIndex = (selectedIndex) => {
-  setSelectedIndex(selectedIndex);
-};
-
 export default ({ route, navigation }) => {
   const [visible, setVisible] = useState(false);
+  const [selectedOverlay, setSelectedOverlay] = useState(-1);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [category, setCategory] = useState([]);
-  // const [business, setBusiness] = useState([]);
+  const [business, setBusiness] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   const buttons = [];
 
@@ -77,17 +95,14 @@ export default ({ route, navigation }) => {
     buttons.push(route.params.selected[i].sub);
   }
 
-  useEffect(() => {
-    setCategory(buttons);
-  }, []);
-
-  console.log(category);
-
-  const initBusiness = () => {};
-
   const toggleOverlay = () => {
     setVisible(!visible);
   };
+
+  useEffect(() => {
+    setCategory(buttons);
+    setBusiness(require("./busan.json"));
+  }, []);
 
   return (
     <Container>
@@ -100,141 +115,147 @@ export default ({ route, navigation }) => {
           containerStyle={{ height: 36 }}
         />
         <ScrollView>
-          {/* 예시를 들기 위함. component mapping 예정 */}
-          <ListItem
-            leftAvatar={
-              <Avatar
-                size="medium"
-                icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
-              />
-            }
-            title="투썸플레이스 역북점"
-            subtitle={
-              <Rating
-                imageSize={14}
-                readonly
-                startingValue={1}
-                coun
-                style={{
-                  alignItems: "flex-start",
-                }}
-              />
-            }
-            rightSubtitle={
-              <TouchableOpacity>
-                <Icon name="plus" type="simple-line-icon" color="black" size={16} />
-              </TouchableOpacity>
-            }
-            titleStyle={{
-              color: "black",
-              fontSize: 16,
-              marginBottom: 4,
-              width: "140%",
-            }}
-            subtitleStyle={{ color: "black", fontWeight: "300" }}
-            containerStyle={{ height: 64 }}
-            bottomDivider
-            onPress={toggleOverlay}
-          />
+          {business.map((data, index) => {
+            if (data.sub === category[selectedIndex]) {
+              return (
+                <View key={index}>
+                  <ListItem
+                    leftAvatar={
+                      <Avatar
+                        size="medium"
+                        icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
+                      />
+                    }
+                    title={data.business_name}
+                    subtitle={
+                      <Rating
+                        imageSize={14}
+                        readonly
+                        startingValue={data.rating * 1}
+                        coun
+                        style={{
+                          alignItems: "flex-start",
+                        }}
+                      />
+                    }
+                    rightSubtitle={
+                      <View style={{}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSelected([...selected, data]);
+                          }}
+                        >
+                          <Icon name="plus" type="simple-line-icon" color="black" size={20} />
+                        </TouchableOpacity>
+                      </View>
+                    }
+                    titleStyle={{
+                      color: "black",
+                      fontSize: 16,
+                      marginBottom: 4,
+                      width: "140%",
+                    }}
+                    subtitleStyle={{ color: "black", fontWeight: "300" }}
+                    containerStyle={{ height: 64 }}
+                    bottomDivider
+                    onPress={() => {
+                      setSelectedOverlay(index);
+                      toggleOverlay();
+                    }}
+                  />
 
-          <ListItem
-            leftAvatar={
-              <Avatar
-                size="medium"
-                icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
-              />
+                  {index === selectedOverlay ? (
+                    <Overlay
+                      isVisible={visible}
+                      onBackdropPress={() => {
+                        toggleOverlay();
+                      }}
+                      overlayStyle={{
+                        width: WIDTH * 0.85,
+                        height: HEIGHT * 0.5,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "lightgrey",
+                      }}
+                    >
+                      <View
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <Text style={{ marginBottom: 12, fontSize: 20 }}>{data.business_name}</Text>
+                        <Image
+                          source={require("./sample.png")}
+                          style={{ width: 120, height: 120 }}
+                          PlaceholderContent={<ActivityIndicator />}
+                        />
+                        <View>
+                          <Text style={{ marginTop: 10, fontSize: 14 }}>
+                            주소 : {data.roadName_address}
+                          </Text>
+                          <Text style={{ marginTop: 10, fontSize: 14 }}>
+                            건물명 : {data.building_name}
+                          </Text>
+                          <Text style={{ marginTop: 10, fontSize: 14 }}>동 : {data.building}</Text>
+                          <Text style={{ marginTop: 10, fontSize: 14 }}>층 : {data.floor}</Text>
+                          <Text style={{ marginTop: 10, fontSize: 14 }}>호 : {data.room_no}</Text>
+                        </View>
+                        <View style={{ display: "flex", flexDirection: "row" }}>
+                          <OverlayButton>
+                            <ButtonText
+                              onPress={() => {
+                                toggleOverlay();
+                                setSelected([...selected, data]);
+                              }}
+                            >
+                              선택
+                            </ButtonText>
+                          </OverlayButton>
+                        </View>
+                      </View>
+                    </Overlay>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+              );
             }
-            title="스타벅스 김량장점"
-            subtitle={
-              <Rating
-                imageSize={14}
-                readonly
-                startingValue={2}
-                coun
-                style={{ alignItems: "flex-start" }}
-              />
-            }
-            rightSubtitle={
-              <TouchableOpacity>
-                <Icon name="plus" type="simple-line-icon" color="black" size={16} />
-              </TouchableOpacity>
-            }
-            titleStyle={{
-              color: "black",
-              fontSize: 16,
-              marginBottom: 4,
-              width: "140%",
-            }}
-            subtitleStyle={{ color: "black", fontWeight: "300" }}
-            containerStyle={{ height: 64 }}
-            bottomDivider
-            onPress={toggleOverlay}
-          />
-
-          <ListItem
-            leftAvatar={
-              <Avatar
-                size="medium"
-                icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
-              />
-            }
-            title="커피테이너 명지대점"
-            subtitle={
-              <Rating
-                imageSize={14}
-                readonly
-                startingValue={3}
-                coun
-                style={{ alignItems: "flex-start" }}
-              />
-            }
-            rightSubtitle={
-              <TouchableOpacity>
-                <Icon name="plus" type="simple-line-icon" color="black" size={16} />
-              </TouchableOpacity>
-            }
-            titleStyle={{
-              color: "black",
-              fontSize: 16,
-              marginBottom: 4,
-              width: "140%",
-            }}
-            subtitleStyle={{ color: "black", fontWeight: "300" }}
-            containerStyle={{ height: 64 }}
-            bottomDivider
-            onPress={toggleOverlay}
-          />
-          <Overlay
-            isVisible={visible}
-            onBackdropPress={toggleOverlay}
-            overlayStyle={{
-              width: WIDTH * 0.85,
-              height: HEIGHT * 0.5,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View>
-              <Text>업소 정보 창</Text>
-            </View>
-          </Overlay>
+          })}
         </ScrollView>
       </BusinessContainer>
       <SelectedContainer>
         <Text style={{ margin: 10, fontSize: 14 }}>선택한 업종</Text>
-        <Selected>
-          <Badge
-            value={1}
-            status="error"
-            containerStyle={{ position: "absolute", top: -12, left: 5 }}
-          />
-          <Data>
-            <Text style={{ marginLeft: 10, marginRight: 5, fontSize: 14 }}>스타벅스 김량장점</Text>
-            <TouchableOpacity onPress={() => {}}>
-              <Ionicons style={{ marginRight: 10 }} name={iconName} size={iconSize}></Ionicons>
-            </TouchableOpacity>
-          </Data>
-        </Selected>
+        {selected &&
+          selected.map((data, index) => {
+            return (
+              <Selected key={index}>
+                <Badge
+                  value={index + 1}
+                  status="error"
+                  containerStyle={{ position: "absolute", top: -12, left: 5 }}
+                />
+                <Data>
+                  <Text style={{ marginLeft: 10, marginRight: 5, fontSize: 14 }}>
+                    {data.business_name}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelected(selected.filter((_, i) => i !== index));
+                    }}
+                  >
+                    <Ionicons
+                      style={{ marginRight: 10 }}
+                      name={iconName}
+                      size={iconSize}
+                    ></Ionicons>
+                  </TouchableOpacity>
+                </Data>
+              </Selected>
+            );
+          })}
       </SelectedContainer>
       <Button onPress={() => navigation.navigate("Category")}>
         <ButtonText>다음</ButtonText>
