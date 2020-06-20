@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Dimensions } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, TouchableOpacity, TextInput, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet from "reanimated-bottom-sheet";
 import { Input, Icon } from "react-native-elements";
@@ -118,7 +118,7 @@ export default function ({ navigation }) {
     <Container>
       <View style={{ position: "absolute", marginHorizontal: 12, zIndex: 1000 }}>
         <Input
-          placeholder={"경기도 용인시 처인구 역북동"}
+          placeholder={"경기도 용인시 처인구 남동"}
           leftIcon={
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Icon type="simple-line-icon" name="menu" iconStyle={{ marginRight: 8 }} />
@@ -140,6 +140,7 @@ export default function ({ navigation }) {
           inputContainerStyle={{
             paddingLeft: 8,
           }}
+          onFocus={() => navigation.navigate("Location")}
         />
       </View>
       {!isLocaLoading && (
