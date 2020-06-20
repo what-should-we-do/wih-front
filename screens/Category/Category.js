@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, Text, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import { Dimensions, Text, TouchableOpacity, StyleSheet, Platform, Alert } from "react-native";
 import styled from "styled-components/native";
 import RNPickerSelect from "react-native-picker-select";
 import { Badge } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -75,6 +76,7 @@ export default ({ navigation }) => {
   const [isSubSelected, setIsSubSelected] = useState(false);
   const [isAll, setIsAll] = useState(0);
   const [selected, setSelected] = useState([]);
+  const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
     Platform.OS === "ios" ? null : initSelected(major, mid, sub);
@@ -110,6 +112,33 @@ export default ({ navigation }) => {
     else if (major !== null && mid != null && sub != null)
       setSelected([...selected, { major: major, mid: mid, sub: sub }]);
   };
+
+  const handleSelected = () => {
+    if (selected.length < 2) {
+      Alert.alert("업종 선택", "업종을 최소 2개 이상 선택해주세요", [
+        {
+          text: "Cancel",
+
+          style: "cancel",
+        },
+        { text: "OK" },
+      ]);
+    } else {
+      navigation.navigate("Business", { selected });
+    }
+  };
+
+  const toast =
+    selected.length === 5
+      ? Toast.show("업종은 5개까지 선택할 수 있습니다.", {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.CENTER,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+        })
+      : null;
 
   return (
     <Container>
@@ -158,7 +187,7 @@ export default ({ navigation }) => {
         <Category>
           <Text
             style={
-              isMajorSelected && selected.length < 5
+              isMajorSelected
                 ? {
                     fontSize: 18,
                     fontWeight: "600",
@@ -199,7 +228,7 @@ export default ({ navigation }) => {
         <Category>
           <Text
             style={
-              isMajorSelected && selected.length < 5
+              isMidSelected
                 ? {
                     fontSize: 18,
                     fontWeight: "600",
@@ -269,12 +298,9 @@ export default ({ navigation }) => {
                 </Data>
               </Selected>
             );
-            {
-              /* <Selected key={index} number={index + 1} data={data} />; */
-            }
           })}
       </SelectedContainer>
-      <Button onPress={() => navigation.navigate("Business", { selected })}>
+      <Button onPress={handleSelected}>
         <ButtonText>다음</ButtonText>
       </Button>
     </Container>
