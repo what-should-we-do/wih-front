@@ -25,11 +25,12 @@ export default function Location({ navigation }) {
         onSubmitEditing={onSubmit}
       />
       <ScrollView>
-        {result.map((item) => (
+        {result.map((item, index) => (
           <Button
+            key={index}
             type="outline"
             title={`${item.sido} ${item.sigungu} ${item.dong}`}
-            onPress={() => navigation.navigate("Category", { loc: item })}
+            onPress={() => navigation.navigate("Category", { result })}
           />
         ))}
       </ScrollView>

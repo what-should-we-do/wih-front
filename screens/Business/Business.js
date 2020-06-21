@@ -101,7 +101,17 @@ export default ({ route, navigation }) => {
 
   useEffect(() => {
     setCategory(buttons);
-    setBusiness(require("./busan.json"));
+    () => {
+      if (route.params.loc.sigungu === "동구" && route.params.loc.dong === "좌천동") {
+        setBusiness(require("./busan.json"));
+      } else if (route.params.loc.sigungu === "하남시" && route.params.loc.dong === "덕풍동") {
+        setBusiness(require("./hanam.json"));
+      } else if (route.params.loc.sigungu === "제주시" && route.params.loc.dong === "연동") {
+        setBusiness(require("./jeju.json"));
+      } else if (route.params.loc.sigungu === "강남구" && route.params.loc.dong === "역삼동") {
+        setBusiness(require("./seoul.json"));
+      }
+    };
   }, []);
 
   return (

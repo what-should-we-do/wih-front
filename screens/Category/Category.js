@@ -67,7 +67,8 @@ const ButtonText = styled.Text`
 const iconName = Platform.OS === "ios" ? "ios-close" : "md-close";
 const iconSize = Platform.OS === "ios" ? 30 : 20;
 
-export default ({ navigation }) => {
+export default ({ route, navigation }) => {
+  const loc = route.params.result;
   const [major, setMajor] = useState(null);
   const [mid, setMid] = useState(null);
   const [sub, setSub] = useState(null);
@@ -76,7 +77,6 @@ export default ({ navigation }) => {
   const [isSubSelected, setIsSubSelected] = useState(false);
   const [isAll, setIsAll] = useState(0);
   const [selected, setSelected] = useState([]);
-  const [toastVisible, setToastVisible] = useState(false);
 
   useEffect(() => {
     Platform.OS === "ios" ? null : initSelected(major, mid, sub);
@@ -124,7 +124,7 @@ export default ({ navigation }) => {
         { text: "OK" },
       ]);
     } else {
-      navigation.navigate("Business", { selected });
+      navigation.navigate("Business", { selected: selected, loc: loc });
     }
   };
 
@@ -139,7 +139,6 @@ export default ({ navigation }) => {
           delay: 0,
         })
       : null;
-
   return (
     <Container>
       <CategoryContainer>
