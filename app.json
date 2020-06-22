@@ -16,7 +16,13 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.wswd.wih",
+      "buildNumber": "0.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.wswd.wih",
+      "versionCode": 0
     }
   }
 }
