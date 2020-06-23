@@ -99,19 +99,23 @@ export default ({ route, navigation }) => {
     setVisible(!visible);
   };
 
+  const initBusiness = () => {
+    const { sido, sigungu, dong } = route.params.loc[0];
+
+    if (sigungu === "동구" && dong === "좌천동") {
+      setBusiness(require("./busan.json"));
+    } else if (sigungu === "하남시" && dong === "덕풍동") {
+      setBusiness(require("./hanam.json"));
+    } else if (sigungu === "제주시" && dong === "연동") {
+      setBusiness(require("./jeju.json"));
+    } else if (sigungu === "강남구" && dong === "역삼동") {
+      setBusiness(require("./seoul.json"));
+    }
+  };
+
   useEffect(() => {
     setCategory(buttons);
-    () => {
-      if (route.params.loc.sigungu === "동구" && route.params.loc.dong === "좌천동") {
-        setBusiness(require("./busan.json"));
-      } else if (route.params.loc.sigungu === "하남시" && route.params.loc.dong === "덕풍동") {
-        setBusiness(require("./hanam.json"));
-      } else if (route.params.loc.sigungu === "제주시" && route.params.loc.dong === "연동") {
-        setBusiness(require("./jeju.json"));
-      } else if (route.params.loc.sigungu === "강남구" && route.params.loc.dong === "역삼동") {
-        setBusiness(require("./seoul.json"));
-      }
-    };
+    initBusiness();
   }, []);
 
   return (
@@ -182,38 +186,45 @@ export default ({ route, navigation }) => {
                       }}
                       overlayStyle={{
                         width: WIDTH * 0.85,
-                        height: HEIGHT * 0.5,
+                        height: HEIGHT * 0.4,
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: "lightgrey",
+                        borderRadius: 12,
                       }}
                     >
-                      <View
-                        style={{
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      >
-                        <Text style={{ marginBottom: 12, fontSize: 20 }}>{data.business_name}</Text>
-                        <Image
-                          source={require("./sample.png")}
-                          style={{ width: 120, height: 120 }}
-                          PlaceholderContent={<ActivityIndicator />}
-                        />
-                        <View>
-                          <Text style={{ marginTop: 10, fontSize: 14 }}>
-                            주소 : {data.roadName_address}
-                          </Text>
-                          <Text style={{ marginTop: 10, fontSize: 14 }}>
-                            건물명 : {data.building_name}
-                          </Text>
-                          <Text style={{ marginTop: 10, fontSize: 14 }}>동 : {data.building}</Text>
-                          <Text style={{ marginTop: 10, fontSize: 14 }}>층 : {data.floor}</Text>
-                          <Text style={{ marginTop: 10, fontSize: 14 }}>호 : {data.room_no}</Text>
+                      <View style={{ display: "flex", alignItems: "center" }}>
+                        <View style={{ flex: 3, flexDirection: "row", marginTop: 8 }}>
+                          <Text style={{ fontSize: 20 }}>{data.business_name}</Text>
                         </View>
-                        <View style={{ display: "flex", flexDirection: "row" }}>
+
+                        <View style={{ flex: 10, flexDirection: "row", justifyContent: "center" }}>
+                          <View
+                            style={{
+                              flexDirection: "column",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Image
+                              source={require("./sample.png")}
+                              style={{
+                                width: 120,
+                                height: 120,
+                                marginBottom: 12,
+                                borderRadius: 12,
+                              }}
+                              PlaceholderContent={<ActivityIndicator />}
+                            />
+                            <Text style={{ marginTop: 10, fontSize: 14 }}>
+                              {data.roadName_address} {data.building}
+                              {data.building ? `${data.building}동` : ""}
+                              {data.floor ? `${data.floor}층` : ""}
+                              {data.room_no ? `${data.romm_no}호` : ""}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View style={{ flex: 4, flexDirection: "row", marginBottom: 8 }}>
                           <OverlayButton>
                             <ButtonText
                               onPress={() => {
