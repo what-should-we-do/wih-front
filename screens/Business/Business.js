@@ -100,7 +100,7 @@ export default ({ route, navigation }) => {
   };
 
   const initBusiness = () => {
-    const { sido, sigungu, dong } = route.params.loc[0];
+    const { sido, sigungu, dong } = route.params.loc;
 
     if (sigungu === "동구" && dong === "좌천동") {
       setBusiness(require("./busan.json"));
@@ -118,6 +118,7 @@ export default ({ route, navigation }) => {
     initBusiness();
   }, []);
 
+  console.log(route.params.loc);
   return (
     <Container>
       <BusinessContainer>
@@ -157,6 +158,9 @@ export default ({ route, navigation }) => {
                         <TouchableOpacity
                           onPress={() => {
                             setSelected([...selected, data]);
+                            if (selectedIndex < category.length - 1) {
+                              setSelectedIndex(selectedIndex + 1);
+                            }
                           }}
                         >
                           <Icon name="plus" type="simple-line-icon" color="black" size={20} />
@@ -230,6 +234,9 @@ export default ({ route, navigation }) => {
                               onPress={() => {
                                 toggleOverlay();
                                 setSelected([...selected, data]);
+                                if (selectedIndex < category.length - 1) {
+                                  setSelectedIndex(selectedIndex + 1);
+                                }
                               }}
                             >
                               선택
