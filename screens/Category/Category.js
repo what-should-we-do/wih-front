@@ -135,7 +135,7 @@ export default ({ route, navigation }) => {
   };
 
   const handleSelected = () => {
-    if (selected.length > 2) {
+    if (selected.length < 2) {
       Alert.alert("업종 선택", "업종을 최소 2개 이상 선택해주세요", [
         {
           text: "Cancel",
