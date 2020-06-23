@@ -30,7 +30,7 @@ export default function Location({ navigation }) {
             key={index}
             type="outline"
             title={`${item.sido} ${item.sigungu} ${item.dong}`}
-            onPress={() => navigation.navigate("Category", { result })}
+            onPress={() => navigation.navigate("Category", { result: item })}
           />
         ))}
       </ScrollView>

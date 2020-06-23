@@ -85,16 +85,36 @@ export default ({ route, navigation }) => {
   const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
       fontSize: 18,
-      borderWidth: 1,
+      borderWidth: 2,
       borderRadius: 4,
-      color: "black",
-      padding: 10, // to ensure the text is never behind the icon
+      borderColor: "#f9a825",
+      padding: 10,
       textAlign: "center",
     },
     inputAndroid: {
       fontSize: 14,
       borderWidth: 1,
       borderRadius: 5,
+      color: "#f9a825",
+      padding: 10,
+      textAlign: "center",
+    },
+  });
+
+  const pickerDisabledStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 18,
+      borderWidth: 1,
+      borderRadius: 4,
+      borderColor: "lightgrey",
+      padding: 10,
+      textAlign: "center",
+    },
+    inputAndroid: {
+      fontSize: 14,
+      borderWidth: 1,
+      borderRadius: 5,
+      borderColor: "lightgrey",
       color: "black",
       padding: 10,
       textAlign: "center",
@@ -102,8 +122,9 @@ export default ({ route, navigation }) => {
   });
 
   const initSelected = (major, mid, sub) => {
-    // 사용자가 대분류, 중분류, 소분류를 모두 선택했을 때
-
+    setMajor(null);
+    setMid(null);
+    setSub(null);
     setIsMajorSelected(false);
     setIsMidSelected(false);
     setIsSubSelected(false);
@@ -114,7 +135,7 @@ export default ({ route, navigation }) => {
   };
 
   const handleSelected = () => {
-    if (selected.length < 2) {
+    if (selected.length > 2) {
       Alert.alert("업종 선택", "업종을 최소 2개 이상 선택해주세요", [
         {
           text: "Cancel",
@@ -139,6 +160,8 @@ export default ({ route, navigation }) => {
           delay: 0,
         })
       : null;
+
+  console.log(route.params);
   return (
     <Container>
       <CategoryContainer>
@@ -181,6 +204,7 @@ export default ({ route, navigation }) => {
             style={pickerSelectStyles}
             items={require("./major.json")}
             disabled={selected.length >= 5}
+            value={major}
           />
         </Category>
         <Category>
@@ -219,9 +243,10 @@ export default ({ route, navigation }) => {
               label: "중분류를 선택하세요",
               value: null,
             }}
-            style={pickerSelectStyles}
+            style={isMajorSelected ? pickerSelectStyles : pickerDisabledStyles}
             items={require("./mid.json").filter((row) => row.parent === major)}
             disabled={!isMajorSelected || selected.length >= 5}
+            value={mid}
           />
         </Category>
         <Category>
@@ -254,7 +279,6 @@ export default ({ route, navigation }) => {
               } else {
                 setIsSubSelected(false);
                 value = null;
-                setSub(null);
               }
             }}
             placeholder={{
@@ -262,9 +286,10 @@ export default ({ route, navigation }) => {
               value: null,
             }}
             onClose={() => initSelected(major, mid, sub)}
-            style={pickerSelectStyles}
+            style={isMidSelected ? pickerSelectStyles : pickerDisabledStyles}
             items={require("./sub.json").filter((row) => row.parent === mid)}
             disabled={!isMidSelected || selected.length >= 5}
+            value={sub}
           />
         </Category>
       </CategoryContainer>
