@@ -18,14 +18,14 @@ export default (props) => {
               overlayContainerStyle={{ backgroundColor: "rgba(255, 167, 38, 0.7)" }}
             />
           }
-          title="유예빈"
+          title="test"
           subtitle={"test@gmail.com"}
           titleStyle={{ color: "black", fontSize: 18, fontWeight: "600", marginBottom: 4 }}
           subtitleStyle={{ color: "black", fontWeight: "300" }}
         />
       </View>
       <DrawerItemList {...props} />
-      <DrawerItem label="Log Out" onPress={() => logout()} />
+      <DrawerItem label="로그아웃" onPress={() => logout()} />
     </DrawerContentScrollView>
   );
 };

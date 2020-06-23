@@ -66,9 +66,8 @@ const ButtonText = styled.Text`
 
 const iconName = Platform.OS === "ios" ? "ios-close" : "md-close";
 const iconSize = Platform.OS === "ios" ? 30 : 20;
-
 export default ({ route, navigation }) => {
-  const loc = route.params.result;
+  const loc = route.params.loc ? route.params.loc : route.params;
   const [major, setMajor] = useState(null);
   const [mid, setMid] = useState(null);
   const [sub, setSub] = useState(null);
@@ -150,7 +149,7 @@ export default ({ route, navigation }) => {
   };
 
   const toast =
-    selected.length === 5
+    selected.length >= 5
       ? Toast.show("업종은 5개까지 선택할 수 있습니다.", {
           duration: Toast.durations.SHORT,
           position: Toast.positions.CENTER,
@@ -161,7 +160,6 @@ export default ({ route, navigation }) => {
         })
       : null;
 
-  console.log(route.params);
   return (
     <Container>
       <CategoryContainer>
@@ -201,7 +199,11 @@ export default ({ route, navigation }) => {
               label: "대분류를 선택하세요",
               value: null,
             }}
-            style={pickerSelectStyles}
+            style={
+              isMajorSelected === false && isMidSelected == false && selected.length < 5
+                ? pickerSelectStyles
+                : pickerDisabledStyles
+            }
             items={require("./major.json")}
             disabled={selected.length >= 5}
             value={major}
@@ -243,7 +245,11 @@ export default ({ route, navigation }) => {
               label: "중분류를 선택하세요",
               value: null,
             }}
-            style={isMajorSelected ? pickerSelectStyles : pickerDisabledStyles}
+            style={
+              isMajorSelected == true && isMidSelected == false
+                ? pickerSelectStyles
+                : pickerDisabledStyles
+            }
             items={require("./mid.json").filter((row) => row.parent === major)}
             disabled={!isMajorSelected || selected.length >= 5}
             value={mid}
@@ -286,7 +292,11 @@ export default ({ route, navigation }) => {
               value: null,
             }}
             onClose={() => initSelected(major, mid, sub)}
-            style={isMidSelected ? pickerSelectStyles : pickerDisabledStyles}
+            style={
+              isMidSelected == true && isSubSelected == false
+                ? pickerSelectStyles
+                : pickerDisabledStyles
+            }
             items={require("./sub.json").filter((row) => row.parent === mid)}
             disabled={!isMidSelected || selected.length >= 5}
             value={sub}

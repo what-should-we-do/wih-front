@@ -27,10 +27,11 @@ export default function Location({ navigation }) {
       <ScrollView>
         {result.map((item, index) => (
           <Button
+            titleStyle={{ color: "#f9a825" }}
             key={index}
             type="outline"
             title={`${item.sido} ${item.sigungu} ${item.dong}`}
-            onPress={() => navigation.navigate("Category", { result: item })}
+            onPress={() => navigation.navigate("Category", { loc: item })}
           />
         ))}
       </ScrollView>

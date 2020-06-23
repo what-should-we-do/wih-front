@@ -12,6 +12,7 @@ import {
 import styled from "styled-components/native";
 import { ListItem, Badge, ButtonGroup, Rating, Avatar, Icon, Overlay } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -100,7 +101,7 @@ export default ({ route, navigation }) => {
   };
 
   const initBusiness = () => {
-    const { sido, sigungu, dong } = route.params.loc;
+    const { sigungu, dong } = route.params.loc;
 
     if (sigungu === "동구" && dong === "좌천동") {
       setBusiness(require("./busan.json"));
@@ -117,8 +118,6 @@ export default ({ route, navigation }) => {
     setCategory(buttons);
     initBusiness();
   }, []);
-
-  console.log(route.params.loc);
   return (
     <Container>
       <BusinessContainer>
@@ -141,7 +140,7 @@ export default ({ route, navigation }) => {
                         icon={{ name: "location-pin", color: "black", type: "simple-line-icon" }}
                       />
                     }
-                    title={data.business_name}
+                    title={data.business_name + " " + data.branch_name}
                     subtitle={
                       <Rating
                         imageSize={14}
@@ -154,12 +153,21 @@ export default ({ route, navigation }) => {
                       />
                     }
                     rightSubtitle={
-                      <View style={{}}>
+                      <View
+                        style={{
+                          height: "120%",
+                          width: "60%",
+                          justifyContent: "center",
+                        }}
+                      >
                         <TouchableOpacity
                           onPress={() => {
-                            setSelected([...selected, data]);
-                            if (selectedIndex < category.length - 1) {
-                              setSelectedIndex(selectedIndex + 1);
+                            if (selected.length < category.length) {
+                              setSelected([...selected, data]);
+                              if (selectedIndex < category.length - 1) {
+                                setSelectedIndex(selectedIndex + 1);
+                              }
+                            } else {
                             }
                           }}
                         >
@@ -169,7 +177,7 @@ export default ({ route, navigation }) => {
                     }
                     titleStyle={{
                       color: "black",
-                      fontSize: 16,
+                      fontSize: 14,
                       marginBottom: 4,
                       width: "140%",
                     }}
@@ -198,8 +206,10 @@ export default ({ route, navigation }) => {
                       }}
                     >
                       <View style={{ display: "flex", alignItems: "center" }}>
-                        <View style={{ flex: 3, flexDirection: "row", marginTop: 8 }}>
-                          <Text style={{ fontSize: 20 }}>{data.business_name}</Text>
+                        <View style={{ flex: 3, flexDirection: "row", marginTop: 10 }}>
+                          <Text style={{ fontSize: 18 }}>
+                            {data.business_name} {data.branch_name}
+                          </Text>
                         </View>
 
                         <View style={{ flex: 10, flexDirection: "row", justifyContent: "center" }}>
@@ -219,11 +229,12 @@ export default ({ route, navigation }) => {
                               }}
                               PlaceholderContent={<ActivityIndicator />}
                             />
-                            <Text style={{ marginTop: 10, fontSize: 14 }}>
-                              {data.roadName_address} {data.building}
-                              {data.building ? `${data.building}동` : ""}
-                              {data.floor ? `${data.floor}층` : ""}
-                              {data.room_no ? `${data.romm_no}호` : ""}
+                            <Text style={{ marginTop: 10, fontSize: 14, textAlign: "center" }}>
+                              {data.roadName_address} {"\n"}
+                              {data.building_name}
+                              {data.building ? `${data.building}동 ` : ""}
+                              {data.floor ? `${data.floor}층 ` : ""}
+                              {data.room_no ? `${data.room_no}호 ` : ""}
                             </Text>
                           </View>
                         </View>
@@ -255,7 +266,7 @@ export default ({ route, navigation }) => {
         </ScrollView>
       </BusinessContainer>
       <SelectedContainer>
-        <Text style={{ margin: 10, fontSize: 14 }}>선택한 업종</Text>
+        <Text style={{ margin: 10, fontSize: 14 }}>선택한 업소</Text>
         {selected &&
           selected.map((data, index) => {
             return (
@@ -267,7 +278,7 @@ export default ({ route, navigation }) => {
                 />
                 <Data>
                   <Text style={{ marginLeft: 10, marginRight: 5, fontSize: 14 }}>
-                    {data.business_name}
+                    {data.business_name} {data.branch_name}
                   </Text>
                   <TouchableOpacity
                     onPress={() => {

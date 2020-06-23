@@ -143,9 +143,13 @@ export default function({ navigation }) {
             marginTop: 48,
             height: 48,
             borderRadius: 4,
+            shadowOffset: { width: 2, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
           }}
           inputContainerStyle={{
             paddingLeft: 8,
+            borderBottomWidth: 0,
           }}
           onFocus={() => navigation.navigate("Location")}
         />
@@ -167,7 +171,7 @@ export default function({ navigation }) {
       )}
       <BottomSheet
         snapPoints={["65%", "13%"]}
-        initialSnap={1}
+        initialSnap={0}
         renderHeader={() => renderHeader(navigation)}
         renderContent={renderContent}
       />
