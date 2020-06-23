@@ -69,16 +69,23 @@ const PanelHandler = styled.View`
   margin-bottom: 5px;
 `;
 
-const renderHeader = (navigation) => (
-  <Header>
-    <PanelHeader>
-      <PanelHandler />
-      <Button onPress={() => navigation.navigate("Category")}>
-        <ButtonText>여기 뭐 있지?</ButtonText>
-      </Button>
-    </PanelHeader>
-  </Header>
-);
+const renderHeader = (navigation) => {
+  const curLoc = {
+    sido: "용인시",
+    sigungu: "처인구",
+    dong: "남동",
+  };
+  return (
+    <Header>
+      <PanelHeader>
+        <PanelHandler />
+        <Button onPress={() => navigation.navigate("Category", curLoc)}>
+          <ButtonText>여기 뭐 있지?</ButtonText>
+        </Button>
+      </PanelHeader>
+    </Header>
+  );
+};
 
 const renderContent = () => (
   <RecommendList>
@@ -91,7 +98,7 @@ const renderContent = () => (
   </RecommendList>
 );
 
-export default function ({ navigation }) {
+export default function({ navigation }) {
   // const [searchValue, setSearchValue] = useState("");
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
