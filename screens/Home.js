@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, TouchableOpacity, TextInput, Dimensions } from "react-native";
+import { View, TouchableOpacity, Text, Dimensions, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import BottomSheet from "reanimated-bottom-sheet";
-import { Input, Icon } from "react-native-elements";
+import { Input, Icon, Card, Button, ListItem } from "react-native-elements";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
+import { ScrollView } from "react-native-gesture-handler";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
 
@@ -12,7 +13,7 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Button = styled.TouchableOpacity`
+const MainButton = styled.TouchableOpacity`
   width: 95%;
   background-color: #f9a825;
   margin: 8px 0;
@@ -38,23 +39,23 @@ const RecommendList = styled.ScrollView`
 const Title = styled.Text`
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 12px;
 `;
 
 const Desc = styled.View`
   width: 100%;
   height: 180px;
-  background-color: gray;
+  border-width: 1px;
+  border-color: lightgrey;
   margin-bottom: 18px;
   border-radius: 8px;
+  display: flex;
 `;
 
 const Header = styled.View`
   background-color: white;
-  /* shadow-color: '#000000'; */
   padding-top: 10px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 `;
 
 const PanelHeader = styled.View`
@@ -66,7 +67,7 @@ const PanelHandler = styled.View`
   height: 6px;
   border-radius: 4px;
   background-color: lightgrey;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 `;
 
 const renderHeader = (navigation) => {
@@ -79,9 +80,9 @@ const renderHeader = (navigation) => {
     <Header>
       <PanelHeader>
         <PanelHandler />
-        <Button onPress={() => navigation.navigate("Category", curLoc)}>
+        <MainButton onPress={() => navigation.navigate("Category", curLoc)}>
           <ButtonText>여기 뭐 있지?</ButtonText>
-        </Button>
+        </MainButton>
       </PanelHeader>
     </Header>
   );
@@ -89,17 +90,93 @@ const renderHeader = (navigation) => {
 
 const renderContent = () => (
   <RecommendList>
-    <Title>제목 1</Title>
-    <Desc />
-    <Title>제목 2</Title>
-    <Desc />
-    <Title>제목 3</Title>
-    <Desc />
+    <Title>맞춤 추천 - 20대 </Title>
+    <Card
+      containerStyle={{
+        marginHorizontal: 0,
+        marginTop: 8,
+        marginBottom: 16,
+        padding: 12,
+        justifyContent: "center",
+      }}
+      image={require("../assets/party.jpeg")}
+      imageProps={{
+        PlaceholderContent: <ActivityIndicator />,
+        placeholderStyle: { backgroundColor: "white" },
+      }}
+      imageStyle={{ width: "100%" }}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          marginBottom: 10,
+        }}
+      >
+        무더위가 내리쬐는 여름, 스트레스를 한 방에 해소할 수 있는 20대 맞춤 유흥 관련 경로를
+        소개합니다.
+      </Text>
+      <Button
+        title="자세히 보기"
+        type="outline"
+        titleStyle={{
+          color: "#f9a825",
+        }}
+        buttonStyle={{
+          borderColor: "#f9a825",
+          borderRadius: "100%",
+          borderWidth: 1,
+        }}
+      />
+    </Card>
+    <Title>테마 - 데이트</Title>
+    <Card
+      containerStyle={{
+        marginHorizontal: 0,
+        marginTop: 8,
+        marginBottom: 16,
+        padding: 12,
+        justifyContent: "center",
+      }}
+      image={require("../assets/game.jpeg")}
+      imageProps={{
+        PlaceholderContent: <ActivityIndicator />,
+        placeholderStyle: { backgroundColor: "white" },
+      }}
+      imageStyle={{ width: "100%" }}
+    >
+      <Text
+        style={{
+          fontSize: 14,
+          marginBottom: 10,
+        }}
+      >
+        코로나바이러스로 돌아다니기 힘든 요즘 실내에서 안전하게 놀 수 있는 데이트 코스를 소개합니다.
+      </Text>
+      <Button
+        title="자세히 보기"
+        type="outline"
+        titleStyle={{
+          color: "#f9a825",
+        }}
+        buttonStyle={{
+          borderColor: "#f9a825",
+          borderRadius: "100%",
+          borderWidth: 1,
+        }}
+      />
+    </Card>
+    <Title>진행중인 이벤트</Title>
+    <ScrollView
+      style={{ marginTop: 8, marginBottom: 80, borderWidth: 1, borderColor: "lightgrey" }}
+    >
+      <ListItem title="이벤트 1" bottomDivider chevron />
+      <ListItem title="이벤트 2" bottomDivider chevron />
+      <ListItem title="이벤트 3" bottomDivider chevron />
+    </ScrollView>
   </RecommendList>
 );
 
 export default function({ navigation }) {
-  // const [searchValue, setSearchValue] = useState("");
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLocaLoading, setIsLocaLoading] = useState(true);
@@ -120,6 +197,10 @@ export default function({ navigation }) {
       console.log(errorMsg);
     }
   });
+
+  useEffect(() => {
+    navigation.closeDrawer();
+  }, []);
 
   return (
     <Container>
@@ -169,8 +250,9 @@ export default function({ navigation }) {
           }}
         />
       )}
+
       <BottomSheet
-        snapPoints={["65%", "13%"]}
+        snapPoints={["65%", "12%"]}
         initialSnap={0}
         renderHeader={() => renderHeader(navigation)}
         renderContent={renderContent}
