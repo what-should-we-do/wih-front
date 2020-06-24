@@ -220,9 +220,9 @@ export default ({ route, navigation }) => {
                             }}
                           >
                             <Image
-                              source={require("./sample.png")}
+                              source={require("./sample.jpeg")}
                               style={{
-                                width: 120,
+                                width: 160,
                                 height: 120,
                                 marginBottom: 12,
                                 borderRadius: 12,
