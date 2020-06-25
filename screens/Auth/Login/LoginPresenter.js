@@ -1,16 +1,17 @@
 import React from "react";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
+import { Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
 
 const Container = styled.View`
   flex: 1;
 `;
 
 const LogoContainer = styled.View`
-  flex: 2;
+  flex: 4;
   align-items: center;
   justify-content: center;
-  padding-top: 48px;
+  margin-top: 30px;
 `;
 
 const Logo = styled.Image`
@@ -19,9 +20,9 @@ const Logo = styled.Image`
 `;
 
 const InputContainer = styled.View`
-  flex: 3;
+  flex: 6;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
 `;
 
 const EmptyView = styled.View``;
@@ -35,8 +36,8 @@ const TextInput = styled.TextInput`
 `;
 
 const AdditionalLink = styled.TouchableOpacity`
-  margin-top: 4px;
-  margin-bottom: 8px;
+  margin-top: 8px;
+  margin-bottom: 12px;
 `;
 
 const AdditionalText = styled.Text`
@@ -62,36 +63,44 @@ const ButtonText = styled.Text`
 
 function LoginPresenter({ email, password, onSignUp, onSubmit }) {
   return (
-    <Container>
-      <LogoContainer>
-        <Logo source={require("../../../assets/logo.png")} />
-      </LogoContainer>
-      <InputContainer>
-        <EmptyView>
-          <TextInput
-            placeholder="Email"
-            textContentType="emailAddress"
-            keyboardType="email-address"
-            {...email}
-          />
-          <TextInput
-            placeholder="Password"
-            secureTextEntry
-            textContentType="password"
-            {...password}
-          />
-          <AdditionalLink onPress={onSignUp}>
-            <AdditionalText>Not having account?</AdditionalText>
-          </AdditionalLink>
-          <AdditionalLink>
-            <AdditionalText>Forgot password?</AdditionalText>
-          </AdditionalLink>
-        </EmptyView>
-        <LogInButton onPress={onSubmit}>
-          <ButtonText>Log In</ButtonText>
-        </LogInButton>
-      </InputContainer>
-    </Container>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <Container>
+          <LogoContainer>
+            <Logo source={require("../../../assets/logo.png")} />
+          </LogoContainer>
+          <InputContainer>
+            <EmptyView>
+              <TextInput
+                placeholder="Email"
+                textContentType="emailAddress"
+                keyboardType="email-address"
+                {...email}
+              />
+              <TextInput
+                placeholder="Password"
+                secureTextEntry
+                textContentType="password"
+                onSubmitEditing={onSubmit}
+                {...password}
+              />
+              <AdditionalLink onPress={onSignUp}>
+                <AdditionalText>Not having account?</AdditionalText>
+              </AdditionalLink>
+              <AdditionalLink>
+                <AdditionalText>Forgot password?</AdditionalText>
+              </AdditionalLink>
+            </EmptyView>
+            <LogInButton onPress={onSubmit}>
+              <ButtonText>Log In</ButtonText>
+            </LogInButton>
+          </InputContainer>
+        </Container>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 

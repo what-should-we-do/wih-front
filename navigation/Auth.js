@@ -9,7 +9,7 @@ export default function Auth() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Log In" component={Login} options={{ headerShown: false }} />
-      <Stack.Screen name="Sign Up" component={Signup} />
+      <Stack.Screen name="Sign Up" component={Signup} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
