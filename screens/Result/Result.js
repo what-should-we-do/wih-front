@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, ScrollView } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { ListItem } from "react-native-elements";
+import styled from "styled-components";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");
+
+const Number = styled.Text`
+  font-size: 18px;
+  font-weight: 500;
+  color: orange;
+  margin: 12px;
+`;
 
 export default function Result({ route, navigation }) {
   const { selected } = route.params;
   const [region, setRegion] = useState({
     latitude: parseFloat(selected[0].longitude),
     longitude: parseFloat(selected[0].latitude),
-    latitudeDelta: 0.03,
-    longitudeDelta: 0.03,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.02,
   });
 
   return (
@@ -19,7 +28,7 @@ export default function Result({ route, navigation }) {
         region={region}
         style={{
           width: WIDTH,
-          height: HEIGHT,
+          height: HEIGHT / 2,
         }}
       >
         {selected.map((point) => (
@@ -33,6 +42,23 @@ export default function Result({ route, navigation }) {
           />
         ))}
       </MapView>
+      <ScrollView
+        style={{
+          width: WIDTH,
+          height: HEIGHT / 2,
+          paddingTop: 12,
+          backgroundColor: "white",
+        }}
+      >
+        {selected.map((place, index) => (
+          <ListItem
+            key={place.sub}
+            title={place.business_name}
+            subtitle={place.roadName_address}
+            leftElement={<Number>{index + 1}</Number>}
+          />
+        ))}
+      </ScrollView>
     </>
   );
 }
