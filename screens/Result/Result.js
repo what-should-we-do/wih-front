@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("screen");

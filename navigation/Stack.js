@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerContent from "../screens/DrawerContent";
@@ -8,11 +9,12 @@ import Category from "../screens/Category";
 import Business from "../screens/Business";
 import Result from "../screens/Result";
 import Settings from "../screens/Settings";
+import { NavigationHelpersContext } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const StackScreen = () => {
+const StackScreen = ({ navigation }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -23,7 +25,14 @@ const StackScreen = () => {
       <Stack.Screen name="Location" component={Location} options={{ headerTitle: "위치 선택" }} />
       <Stack.Screen name="Category" component={Category} options={{ headerTitle: "업종 선택" }} />
       <Stack.Screen name="Business" component={Business} options={{ headerTitle: "업소 선택" }} />
-      <Stack.Screen name="Result" component={Result} options={{ headerTitle: "결과 화면" }} />
+      <Stack.Screen
+        name="Result"
+        component={Result}
+        options={{
+          headerTitle: "결과 화면",
+          headerRight: () => <Button onPress={() => navigation.navigate("Home")} title="홈으로" />,
+        }}
+      />
     </Stack.Navigator>
   );
 };
