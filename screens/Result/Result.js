@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, ScrollView } from "react-native";
+import { Dimensions, ScrollView, TouchableOpacity, Text } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { ListItem } from "react-native-elements";
 import styled from "styled-components";
