@@ -296,7 +296,7 @@ export default ({ route, navigation }) => {
             );
           })}
       </SelectedContainer>
-      <Button onPress={() => navigation.navigate("Category")}>
+      <Button onPress={() => navigation.navigate("Result", { selected })}>
         <ButtonText>다음</ButtonText>
       </Button>
     </Container>
